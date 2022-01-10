@@ -47,7 +47,7 @@ jobs:
 
     # 압축파일로 전달하기
     - name: Make zip file
-      run: zip -r -qq -j ./karrot-market-build.zip ./deploy/
+      run: zip -r -qq -j ./karrot-market.zip ./deploy/
 
     # S3 버킷으로 복사하기
     - name: Deliver to AWS S3
@@ -58,7 +58,7 @@ jobs:
         aws s3 cp \
         --region ap-northeast-2 \
         --acl private \
-        ./karrot-market-build.zip s3://karrot-market-build/
+        ./karrot-market.zip s3://karrot-market/
 
     # Deploy
     - name: Deploy

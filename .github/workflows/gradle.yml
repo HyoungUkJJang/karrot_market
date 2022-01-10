@@ -70,5 +70,5 @@ jobs:
         --application-name numble-karrot \
         --deployment-group-name numble-karrot-group \
         --file-exists-behavior OVERWRITE \
-        --s3-location butket=karrot-market,bundleType=zip,key=karrot-market-build.zip \
+        --s3-location butket=karrot-market,bundleType=zip,key=karrot-market.zip \
         --region ap-northeast-2

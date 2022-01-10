@@ -45,10 +45,6 @@ jobs:
     - name: Copy appspec
       run: cp appspec.yml ./deploy/
 
-    # script 파일 복사하기
-    - name: Copy Shell
-      run: cp ./scripts/* ./deploy/
-
     # 압축파일로 전달하기
     - name: Make zip file
       run: zip -r -qq -j ./karrot-market-build.zip ./deploy/

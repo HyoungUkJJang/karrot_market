@@ -15,17 +15,64 @@ on:
 
 jobs:
   build:
-
+    # 실행 환경
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up JDK 11
       uses: actions/setup-java@v2
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    # Build
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
-      with:
-        arguments: build
+      run: ./gradlew clean build
+
+    # 전송할 파일을 담을 디렉토리 생성
+    - name: Make Directory for deliver
+      run: mkdir deploy
+
+    # Jar 파일 복사하기
+    - name: Copy Jar
+      run: cp ./build/libs/*.jar ./deploy/
+
+    # appspec.yml 복사하기
+    - name: Copy appspec
+      run: cp appspec.yml ./deploy/
+
+    # script 파일 복사하기
+    - name: Copy Shell
+      run: cp ./scripts/* ./deploy/
+
+    # 압축파일로 전달하기
+    - name: Make zip file
+      run: zip -r -qq -j ./karrot-market-build.zip ./deploy/
+
+    # S3 버킷으로 복사하기
+    - name: Deliver to AWS S3
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_KEY_ID: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws s3 cp \
+        --region ap-northeast-2 \
+        --acl private \
+        ./karrot-market-build.zip s3://karrot-market-build/
+
+    # Deploy
+    - name: Deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws deploy create-deployment \
+        --application-name numble-karrot \
+        --deployment-group-name numble-karrot-group \
+        --file-exists-behavior OVERWRITE \
+        --s3-location butket=karrot-market,bundleType=zip,key=karrot-market-build.zip \
+        --region ap-northeast-2

@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/karrot_market?serverTimezone=Asia/Seoul
+    username: root
+    admin:
+    jdbc: com.mysql.cj.jdbc.Driver

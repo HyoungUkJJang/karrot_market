@@ -45,6 +45,10 @@ jobs:
     - name: Copy shell
       run: cp ./scripts/* ./deploy/
 
+    # 스크립트 권한 추가하기
+    - name: Permission shell
+      run: chmod +x ./deploy.sh
+
     # appspec.yml 복사하기
     - name: Copy appspec
       run: cp appspec.yml ./deploy/

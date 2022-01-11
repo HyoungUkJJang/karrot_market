@@ -12,7 +12,7 @@ public class HomeController {
 
     @GetMapping
     public String health() {
-        return "alive!";
+        return "CI/CD Test Task1";
     }
 
 }

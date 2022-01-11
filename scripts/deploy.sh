@@ -1,9 +1,13 @@
-# !/bin/bash
+#!/bin/bash
 
 REPOSITORY=/home/ec2-user/app/deploy
 PROJECT_NAME=karrot
 
 echo "> 현재 구동중인 애플리케이션 pid 확인하기"
+
+echo pwd > a.out
+
+echo who > b.out
 
 CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)
 

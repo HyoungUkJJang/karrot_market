@@ -41,6 +41,10 @@ jobs:
     - name: Copy Jar
       run: cp ./build/libs/*.jar ./deploy/
 
+    # 스크립트 파일 복사하기
+    - name: Copy shell
+      run: cp ./scripts/* ./deploy/
+
     # appspec.yml 복사하기
     - name: Copy appspec
       run: cp appspec.yml ./deploy/

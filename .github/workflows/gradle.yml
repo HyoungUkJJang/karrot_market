@@ -41,6 +41,10 @@ jobs:
     - name: Copy Jar
       run: cp ./build/libs/*.jar ./deploy/
 
+    # Jar 파일 권한 추가하기
+    - name: Permission Jar
+      run: chmod +x ./deploy/*.jar
+
     # 스크립트 파일 복사하기
     - name: Copy shell
       run: cp ./scripts/* ./deploy/

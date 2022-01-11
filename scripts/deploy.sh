@@ -5,9 +5,9 @@ PROJECT_NAME=karrot
 
 echo "> 현재 구동중인 애플리케이션 pid 확인하기"
 
-echo pwd > a.out
+echo pwd
 
-echo who > b.out
+echo who
 
 CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)
 

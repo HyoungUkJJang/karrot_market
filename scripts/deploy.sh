@@ -1,4 +1,4 @@
-#!/bin/bash
+# !/bin/bash
 
 REPOSITORY=/home/ec2-user/app/deploy
 PROJECT_NAME=karrot

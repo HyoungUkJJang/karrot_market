@@ -1,6 +1,13 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.6.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 	id 'java'
 }
 
@@ -69,6 +76,12 @@ dependencies {
 	 **************/
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+	/**************
+	 ** QueryDSL **
+	 **************/
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
 	/***************
 	 ** Amazon S3 **
 	 ****************/
@@ -79,3 +92,29 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+/***************************
+ ** QueryDSL Config Start **
+ ***************************/
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+/***************************
+ *** QueryDSL Config End ***
+ ***************************/

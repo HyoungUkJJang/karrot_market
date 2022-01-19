@@ -53,4 +53,14 @@ public class Member extends BaseEntity {
         this.memberRole = memberRole;
     }
 
+    /**
+     * 회원의 닉네임을 수정합니다.
+     * @param newNickName 수정될 닉네임
+     * @return 수정된 유저
+     */
+    public Member userUpdate(String newNickName) {
+        this.nickName = newNickName;
+        return this;
+    }
+
 }

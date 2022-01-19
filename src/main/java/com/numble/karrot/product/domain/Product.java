@@ -1,5 +1,6 @@
 package com.numble.karrot.product.domain;
 
+import com.numble.karrot.category.domain.Category;
 import com.numble.karrot.common.BaseEntity;
 import com.numble.karrot.member.domain.Member;
 import lombok.Builder;
@@ -36,8 +37,13 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Builder
-    public Product(String title, String description, Integer price, Integer heartCount, Integer replyCount, ProductStatus productStatus, Member member) {
+    public Product(String title, String description, Integer price, Integer heartCount,
+                   Integer replyCount, ProductStatus productStatus, Member member, Category category) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -45,6 +51,7 @@ public class Product extends BaseEntity {
         this.replyCount = replyCount;
         this.productStatus = productStatus;
         this.member = member;
+        this.category = category;
     }
 
 }

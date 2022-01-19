@@ -3,11 +3,14 @@ package com.numble.karrot.product.domain;
 import com.numble.karrot.category.domain.Category;
 import com.numble.karrot.common.BaseEntity;
 import com.numble.karrot.member.domain.Member;
+import com.numble.karrot.product_image.domain.ProductImage;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 상품 도메인 클래스입니다.
@@ -40,6 +43,9 @@ public class Product extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private List<ProductImage> productImages = new ArrayList<>();
 
     @Builder
     public Product(String title, String description, Integer price, Integer heartCount,

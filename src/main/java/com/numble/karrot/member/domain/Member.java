@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 /**
- * 캐럿마켓 회원 도메인
+ * 캐럿마켓 회원 도메인입니다.
  */
 @Entity
 @Getter
@@ -17,6 +17,7 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @Column(nullable = false, length = 50, unique = true)

@@ -64,7 +64,7 @@ public class S3Uploader {
      * @throws IOException
      */
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert2(multipartFile);
+        File uploadFile = convert(multipartFile).get();
 //                .orElseThrow(() -> new IllegalArgumentException(
 //                        "error: MultipartFile -> File convert fail"
 //                ));

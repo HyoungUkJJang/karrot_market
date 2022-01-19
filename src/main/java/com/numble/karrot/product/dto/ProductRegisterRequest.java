@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ProductRegisterRequest {
 
     @NotEmpty(message = "상품 이름은 필수입니다.")
     private String title;
-    @NotEmpty(message = "가격 입력은 필수입니다.")
+    @NotNull(message = "가격 입력은 필수입니다.")
     private int price;
     @NotEmpty(message = "상품 설명은 필수입니다.")
     private String description;

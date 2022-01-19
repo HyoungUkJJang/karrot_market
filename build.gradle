@@ -26,14 +26,39 @@ jar {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	/*************
+	 ** Starter **
+	 *************/
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	/***************
+	 ** Thymeleaf **
+	 ****************/
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	/***************
+	 ** Validation **
+	 ****************/
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	/************
+	 ** LomBok **
+	 *************/
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	/***********
+	 ** MySQL **
+	 ************/
+	runtimeOnly 'mysql:mysql-connector-java'
+
+	/*************
+	 ** DataJPA **
+	 **************/
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
 }
 
 test {

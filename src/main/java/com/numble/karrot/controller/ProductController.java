@@ -50,7 +50,7 @@ public class ProductController {
 
         List<ProductListResponse> productList = toProductListResponse();
         model.addAttribute("productList", productList);
-        return "/products/ProductList";
+        return "products/ProductList";
 
     }
 

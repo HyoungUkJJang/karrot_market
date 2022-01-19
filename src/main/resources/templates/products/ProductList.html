@@ -89,7 +89,7 @@
     }
 </style>
 <body>
-<div th:replace="/layout/header :: authorize-fragment"/>
+<div th:replace="layout/header :: authorize-fragment"/>
 <div style="overflow:scroll; width:100%; height:500px;" class="div-index">
 
     <div class="div1" th:each="product : ${productList}" >
@@ -108,6 +108,6 @@
     </div>
     <a href="/product/register"><img class="add-btn" src="/images/addBtn.png"></a>
 </div>
-<div th:replace="/layout/footer :: authorize-fragment"/>
+<div th:replace="layout/footer :: authorize-fragment"/>
 </body>
 </html>

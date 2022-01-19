@@ -52,7 +52,7 @@ public class ProductController {
 
         List<ProductListResponse> productList = toProductListResponse();
         model.addAttribute("productList", productList);
-        return "products/ProductList";
+        return "/products/ProductList";
 
     }
 
@@ -89,7 +89,7 @@ public class ProductController {
     public String registerPage(Model model) {
 
         model.addAttribute("categoryList", categoryService.getCategoryList());
-        return "products/registerForm";
+        return "/products/registerForm";
 
     }
 

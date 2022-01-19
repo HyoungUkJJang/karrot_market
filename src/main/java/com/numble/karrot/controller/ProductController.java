@@ -74,7 +74,7 @@ public class ProductController {
         model.addAttribute("productDetail", responseProduct);
         model.addAttribute("memberInfo", responseMember);
 
-        return "/products/ProductDetail";
+        return "products/ProductDetail";
 
     }
 
@@ -87,7 +87,7 @@ public class ProductController {
     public String registerPage(Model model) {
 
         model.addAttribute("categoryList", categoryService.getCategoryList());
-        return "/products/registerForm";
+        return "products/registerForm";
 
     }
 
@@ -111,7 +111,7 @@ public class ProductController {
             productImageService.save(productImage);
         }
 
-        return "/products/ProductList";
+        return "products/ProductList";
 
     }
 

@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * 회원 거래정보 도메인입니다.
+ */
 @Entity
 @Getter
 @NoArgsConstructor

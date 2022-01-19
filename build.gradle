@@ -38,6 +38,16 @@ dependencies {
 	 ****************/
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+	/************************
+	 ** Thymeleaf Security **
+	 ************************/
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+	/**************
+	 ** Security **
+	 ***************/
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	/***************
 	 ** Validation **
 	 ****************/

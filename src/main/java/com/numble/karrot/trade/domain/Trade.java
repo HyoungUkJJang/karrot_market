@@ -1,5 +1,6 @@
 package com.numble.karrot.trade.domain;
 
+import com.numble.karrot.common.BaseEntity;
 import com.numble.karrot.member.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Trade {
+public class Trade extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

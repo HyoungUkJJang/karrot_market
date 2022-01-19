@@ -1,5 +1,6 @@
 package com.numble.karrot.member.domain;
 
+import com.numble.karrot.common.BaseEntity;
 import com.numble.karrot.member_image.domain.MemberImage;
 import com.numble.karrot.trade.domain.Trade;
 import lombok.AccessLevel;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

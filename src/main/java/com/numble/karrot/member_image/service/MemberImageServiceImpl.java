@@ -14,6 +14,7 @@ public class MemberImageServiceImpl implements MemberImageService{
     private final MemberImageRepository memberImageRepository;
 
     @Override
+    @Transactional
     public MemberImage save(MemberImage memberImage) {
         return memberImageRepository.save(memberImage);
     }

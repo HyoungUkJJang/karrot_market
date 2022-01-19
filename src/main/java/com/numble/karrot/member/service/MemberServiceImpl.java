@@ -4,6 +4,7 @@ import com.numble.karrot.member.domain.Member;
 import com.numble.karrot.member.exception.MemberNotFoundException;
 import com.numble.karrot.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public Member join(Member member) {
+        member.pwdEncode(passwordEncoder);
         return memberRepository.save(member);
     }
 

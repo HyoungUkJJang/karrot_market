@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
+    <title>Title</title>
+</head>
+<div class="div-footer" th:fragment="authorize-fragment" align="center">
+    <div class="div-footer-left">
+        <a href="/product"><img src="/images/main.png" style="max-width:50px; height:auto;"></a>
+        <h6 class="h6-footer">Main</h6>
+    </div>
+    <div class="div-footer-right">
+        <a href="/mypage"><img src="/images/myPage.png" style="max-width:50px; height:auto;"></a>
+        <h6 class="h6-footer">MyPage</h6>
+    </div>
+</div>
+</html>
+
+<!--
+<p sec:authorize="isAnonymous()">이미 회원이신가요? <a href="/login">로그인</a></p>
+    <p sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></p>
+
+-->

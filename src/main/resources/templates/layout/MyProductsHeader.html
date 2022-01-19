@@ -1,76 +1,54 @@
 <!DOCTYPE html>
-<!--
-[상단 고정]
-
-position: fixed;
-
-top: 0;
-
-left: 0;
-
-
-
-[하단 고정]
-
-position: fixed;
-
-bottom: 0;
-
-left: 0;
--->
-<html xmlns:th="https://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
-    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
-    <meta charset="UTF-8">
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi" charset="UTF-8">
     <title>Title</title>
 </head>
 <style>
-    .add-btn{
-        position:fixed;
-        width:35px;
-        height:35px;
-        bottom:70px;
-        right:20px;
-    }
     .div-header {
         width:100%;
-        height:70px;
+        height:50px;
         background-color: orange;
+        line-height: 70px;
     }
-    .div-footer{
-        width: 100%;
-        height: 88px;
-        /* background-color: orange; */
-        border: 1px;
-        /* border: solid; */
-        border-top-width: thin;
-        border-style: solid;
-    }
-    .div-footer-left {
-        width:50%;
-        height:88px;
-        float: left;
-        text-align:center;
-        margin-top:15px;
-    }
-    .div-footer-right {
-        width:50%;
-        height:88px;
-        float: right;
-        text-align:center;
-        margin-top:15px;
-    }
+    .div-header img{
+        width:30px;
+        height:30px;
 
+        margin-left:15px;
+    }
+    .div-tab {
+        width:100%;
+        height:60px;
+        background-color:green;
+    }
+    .div-tab .left{
+        width:50%;
+        height:60px;
+        float:left;
+        background-color:red;
+        text-align:center;
+        line-height: 60px;
+    }
+    .div-tab .right{
+        width:50%;
+        height:auto;
+        float:right;
+        text-align:center;
+        line-height: 60px;
+    }
     .div-index {
         width:100%;
         height:500px;
+        background-color:green;
     }
     .div1 {
         width:98%;
         height:130px;
         margin-left:3px;
+        background-color:green;
     }
     .div2 {
         margin-top : 10px;
@@ -97,21 +75,22 @@ left: 0;
         font-weight: bold;
     }
 
-     .h6-footer {
-        display: block;
-        font-size: 0.67em;
-        margin-block-start: 0em;
-        margin-block-end: 1em;
-        margin-inline-start: 5px;
-        margin-inline-end: 0px;
-        font-weight: bold;
-    }
 </style>
 <body>
-<div th:replace="/layout/header :: authorize-fragment"/>
+<div class="div-header">
+    <img src="">
+</div>
+<div class = "div-tab">
+    <div class="left">
+        판매중
+    </div>
+    <div class="right">
+        거래완료
+    </div>
+</div>
 <div style="overflow:scroll; width:100%; height:500px;" class="div-index">
 
-    <div class="div1" th:each="product : ${productList}" >
+    <div class="div1" th:each="product : ${myProducts}" >
         <div class="div2">
             <a th:href="@{/product/{id}(id = ${product.id})}">
                 <img th:src="${product.thumbnailImage}" style="width:100%; height:100%">
@@ -127,6 +106,13 @@ left: 0;
     </div>
     <a href="/product/register"><img class="add-btn" src="/images/addBtn.png"></a>
 </div>
-<div th:replace="/layout/footer :: authorize-fragment"/>
 </body>
 </html>
+
+<!--
+<div class="div-header" th:fragment="authorize-fragment" align="center">
+    <div th:if="${#authorization.expr('isAuthenticated()')}">
+        <h6 th:text="${#authentication.name}"></h6>
+    </div>
+</div>
+-->

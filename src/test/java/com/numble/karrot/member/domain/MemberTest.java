@@ -15,15 +15,18 @@ class MemberTest {
                 .name("김형욱")
                 .phone("010-0000-0000")
                 .nickName("캐럿맨")
+                .memberRole(MemberRole.ROLE_USER)
                 .build();
 
         //WHEN
+        MemberRole checkedRole = MemberRole.ROLE_USER;
         String checkedEmail = "test@mail.com";
         String checkedName = "김형욱";
 
         //THEN
         assertEquals(checkedEmail, member.getEmail());
         assertEquals(checkedName, member.getName());
+        assertEquals(checkedRole, member.getMemberRole());
     }
 
 }

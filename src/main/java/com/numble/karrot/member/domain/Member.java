@@ -29,13 +29,18 @@ public class Member {
     private String phone;
     private String nickName;
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
+
     @Builder
-    public Member(String email, String password, String name, String phone, String nickName) {
+    public Member(String email, String password, String name, String phone, String nickName,
+                  MemberRole memberRole) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.phone = phone;
         this.nickName = nickName;
+        this.memberRole = memberRole;
     }
 
 }

@@ -17,6 +17,7 @@ public class MemberImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_image_id")
     private Long id;
 
     private String filePath;

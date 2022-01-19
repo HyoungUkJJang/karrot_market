@@ -17,6 +17,7 @@ public class MemberServiceImpl implements MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public Member join(Member member) {
         member.pwdEncode(passwordEncoder);
         return memberRepository.save(member);

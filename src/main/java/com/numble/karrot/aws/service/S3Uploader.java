@@ -116,10 +116,8 @@ public class S3Uploader {
      * @throws IOException
      */
     private Optional<File> convert(MultipartFile file) throws IOException {
-        File convertFile = new File("/home/ec2-user/files/"+ file.getOriginalFilename());
 
-//        File convertFile = new File(System.getProperty("user.dir")
-//                + "/" + file.getOriginalFilename());
+        File convertFile = new File("/home/ec2-user/files/"+ file.getOriginalFilename());
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
@@ -127,14 +125,7 @@ public class S3Uploader {
             return Optional.of(convertFile);
         }
         return Optional.empty();
-    }
 
-    public File convert2(MultipartFile multiFile) throws IOException {
-        File uploadFile = new File("/home/ec2-user/files/"+multiFile.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(uploadFile);
-        fos.write(multiFile.getBytes());
-        fos.close();
-        return uploadFile;
     }
 
 }

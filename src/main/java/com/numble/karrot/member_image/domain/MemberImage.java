@@ -37,4 +37,16 @@ public class MemberImage extends BaseEntity {
         this.member = member;
     }
 
+    /**
+     * 회원 이미지 프로필을 업데이트 합니다.
+     * @param filePath 새로운 패스
+     * @param originalFileName 새로운 이미지 원본 이름
+     * @param serverFileName 새로운 서버 이미지 이름
+     */
+    public void updateMemberImage(String filePath, String originalFileName, String serverFileName) {
+        this.filePath = filePath;
+        this.originalFileName = originalFileName;
+        this.serverFileName = serverFileName;
+    }
+
 }

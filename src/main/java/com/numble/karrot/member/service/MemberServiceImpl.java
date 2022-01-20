@@ -30,9 +30,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member update(String email, String newNickName) {
-        Member findMember = findMember(email);
-        return findMember.userUpdate(newNickName);
+    @Transactional
+    public Member update(Member member, String newNickName) {
+        return member.userUpdate(newNickName);
     }
 
     @Override

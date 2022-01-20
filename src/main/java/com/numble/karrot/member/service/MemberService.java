@@ -23,11 +23,11 @@ public interface MemberService {
 
     /**
      * 사용자의 닉네임을 수정합니다.
-     * @param email 수정활 사용자 이메일
+     * @param member 수정활 사용자 엔티티
      * @param newNickName 수정될 닉네임
      * @return 수정된 유저
      */
-    Member update(String email, String newNickName);
+    Member update(Member member, String newNickName);
 
     /**
      * 사용자 아이디의 이메일 중복 여부를 학인하여 true / false 를 리턴합니다.

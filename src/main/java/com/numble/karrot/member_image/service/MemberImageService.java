@@ -14,4 +14,19 @@ public interface MemberImageService {
      */
     MemberImage save(MemberImage memberImage);
 
+    /**
+     * 회원의 이미지 정보를 불러옵니다.
+     * @param memberId 회원의 아이디
+     * @return 이미지 정보
+     */
+    MemberImage findMemberImage(Long memberId);
+
+    /**
+     * 회원 이미지를 업데이트 합니다.
+     * @param memberImage
+     * @param newFilePath
+     * @param newOriginalFileName
+     * @param newServerFileName
+     */
+    void updateMemberImage(MemberImage memberImage, String newFilePath, String newOriginalFileName, String newServerFileName);
 }

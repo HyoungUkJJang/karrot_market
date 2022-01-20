@@ -27,6 +27,7 @@
         margin-left:20px;;
         width:70px;
         height:70px;
+        border-radius: 70%;
     }
     .div-profile .updateBtn {
         width:100%;
@@ -100,23 +101,30 @@
 <div class="div-header">
     나의당근
 </div>
+
 <div class="div-profile">
+
     <div class="image">
-        <img th:src="${memberInfo.profileImage}">
-        <span th:text="${memberInfo.nickName}"></span>
+        <img th:src="${memberFitResponse.profileImage}">
+        <span th:text="${memberFitResponse.nickName}"></span>
     </div>
+
     <div class="updateBtn">
         <button onclick ="location.href='/mypage/update';">수정하기</button>
     </div>
+
 </div>
+
 <div class="div-index">
     <div class="left"> <img src="/images/sellBtn.png"/> </div>
     <div class="right"> <a href="/mypage/products">판매내역</a> </div>
 </div>
+
 <div class="div-index">
     <div class="left"> <img src="/images/heartBtn.png"/> </div>
     <div class="right"> 관심내역 </div>
 </div>
+
 <div class="div-index">
     <p sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></p>
 </div>

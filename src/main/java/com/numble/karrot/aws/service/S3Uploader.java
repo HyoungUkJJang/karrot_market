@@ -64,10 +64,10 @@ public class S3Uploader {
      * @throws IOException
      */
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        File uploadFile = convert(multipartFile).get();
-//                .orElseThrow(() -> new IllegalArgumentException(
-//                        "error: MultipartFile -> File convert fail"
-//                ));
+        File uploadFile = convert(multipartFile)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "error: MultipartFile -> File convert fail"
+                ));
 
         return upload(uploadFile, dirName);
     }
@@ -118,6 +118,7 @@ public class S3Uploader {
     private Optional<File> convert(MultipartFile file) throws IOException {
 
         File convertFile = new File("/home/ec2-user/files/"+ file.getOriginalFilename());
+//        File convertFile = new File("/Users/uh/Desktop/files"+ file.getOriginalFilename());
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());

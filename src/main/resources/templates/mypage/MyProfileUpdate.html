@@ -7,31 +7,75 @@
     <title>Title</title>
 </head>
 <style>
+.div-profile {
+ height:600px;
+}
+.div-profile .image{
+    height: 300px;
+    text-align: center;
+    line-height: 420px;
+}
+}
+.div-profile .image img{
+    width: 45%;
+    border-radius: 70%;
+}
+
+.div-profile .imageFile {
+    height: 100px;
+    text-align: center;
+}
 
 .input-file-button{
+  width:80%;
+  height:60px;
   padding: 6px 25px;
   background-color:#FF931E;
   border-radius: 4px;
   color: white;
   cursor: pointer;
 }
+
 </style>
+
 <body>
-    <form>
-        <div class="div-profile">
-            <div class="image">
-                <img th:src="${memberInfo.profileImage}">
-                <label class="input-file-button" for="inputFile">
+
+<div class="div-profile">
+
+        <div class="image">
+            <img th:src="${memberFitResponse?.profileImage}" id="image" style="width: 45%; height: 160px; border-radius: 70%;">
+        </div>
+
+    <form action="/mypage/update" method="post" enctype="multipart/form-data">
+        <div class="imageFile">
+                <label class="input-file-button" for="files">
                     프로필 사진 선택하기
-                </label>
-                <input type="file" name="" style="display:none" id="inputFile">
-            </div>
-            <div>
-                <input type="text" name="" th:value="${memberInfo.profileImage}">
-            </div>
-            <div class="updateBtn">
-                <button onclick ="location.href='/join';">수정하기</button>
-            </div>
+                 </label>
+                 <input type="file" id="files" name="memberImage" style="display:none">
+        </div>
+
+        <div>
+            <input type="text" name="nickName" th:value="${memberFitResponse?.nickName}">
+        </div>
+
+        <div class="updateBtn">
+            <input type="submit" value="완료">
         </div>
     </form>
+
+</div>
 </body>
+<script>
+    document.getElementById("files").onchange = function () {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+        // get loaded data and render thumbnail.
+        document.getElementById("image").src = e.target.result;
+    };
+
+    // read the image file as a data URL.
+    reader.readAsDataURL(this.files[0]);
+};
+</script>
+</html>

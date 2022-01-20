@@ -19,4 +19,15 @@ public class MemberImageServiceImpl implements MemberImageService{
         return memberImageRepository.save(memberImage);
     }
 
+    @Override
+    public MemberImage findMemberImage(Long memberId) {
+        return memberImageRepository.findByMemberId(memberId);
+    }
+
+    @Override
+    @Transactional
+    public void updateMemberImage(MemberImage memberImage, String newFilePath, String newOriginalFileName, String newServerFileName) {
+        memberImage.updateMemberImage(newFilePath, newOriginalFileName, newServerFileName);
+    }
+
 }

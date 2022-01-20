@@ -11,6 +11,7 @@ import com.numble.karrot.product.dto.ProductListResponse;
 import com.numble.karrot.product.dto.ProductRegisterRequest;
 import com.numble.karrot.product.service.ProductService;
 import com.numble.karrot.product_image.domain.ProductImage;
+import com.numble.karrot.product_image.domain.ProductImageNotInit;
 import com.numble.karrot.product_image.service.ProductImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -106,9 +107,20 @@ public class ProductController {
         Product product = form.toProductEntity(findMember);
         Product register = productService.register(product);
 
-        ArrayList<ProductImage> productImages = s3Uploader.uploadList(form.getProductImages(), "products", register);
-        for (ProductImage productImage : productImages) {
+        if (form.getProductImages().size() == 1 && form.getProductImages().get(0)
+                .getOriginalFilename().equals("")) {
+            ProductImage productImage = ProductImage.builder()
+                    .filePath(ProductImageNotInit.FILE_PATH)
+                    .originalFileName(ProductImageNotInit.ORIGINAL_FILE_NAME)
+                    .serverFileName(ProductImageNotInit.SERVER_FILE_NAME)
+                    .product(register)
+                    .build();
             productImageService.save(productImage);
+        } else {
+            ArrayList<ProductImage> productImages = s3Uploader.uploadList(form.getProductImages(), "products", register);
+            for (ProductImage productImage : productImages) {
+                productImageService.save(productImage);
+            }
         }
 
         return "products/ProductList";

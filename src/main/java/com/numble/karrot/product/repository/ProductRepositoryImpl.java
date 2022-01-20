@@ -6,6 +6,7 @@ import com.numble.karrot.product.domain.QProduct;
 import com.querydsl.jpa.JPQLQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.numble.karrot.member.domain.QMember.*;
@@ -14,7 +15,8 @@ import static com.numble.karrot.product.domain.QProduct.*;
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
-    private JPQLQueryFactory jpqlQueryFactory;
+    private final EntityManager em;
+    private final JPQLQueryFactory jpqlQueryFactory;
 
     @Override
     public List<Product> findMyProducts(Long memberId) {

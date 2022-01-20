@@ -7,7 +7,9 @@ import com.numble.karrot.member.dto.MemberUpdateRequest;
 import com.numble.karrot.member.service.MemberService;
 import com.numble.karrot.member_image.domain.MemberImage;
 import com.numble.karrot.member_image.service.MemberImageService;
+import com.numble.karrot.product.dto.ProductListResponse;
 import com.numble.karrot.product.service.ProductService;
+import com.numble.karrot.product_image.domain.ProductImageNotInit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 마이 페이지와 관련된 HTTP 요청을 처리하는 클래스 입니다.
@@ -70,6 +74,22 @@ public class MyPageController {
     }
 
     /**
+     * 내가 올린 상품 페이지로 이동합니다.
+     * @param userDetails
+     * @param model
+     * @return
+     */
+    @GetMapping("/products")
+    public String myProductsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String email = userDetails.getUsername();
+        Member findMember = memberService.findMember(email);
+        List<ProductListResponse> myProducts = toMyProductList(findMember);
+        model.addAttribute("myProducts", myProducts);
+
+        return "mypage/MyProducts";
+    }
+
+    /**
      * 회원정보를 수정합니다.
      * @param form 수정할 정보
      * @return 다시 마이페이지로 이동합니다.
@@ -90,6 +110,25 @@ public class MyPageController {
         memberService.update(member, form.getNickName());
 
         return "redirect:/mypage";
+    }
+
+    /**
+     * 나의 상품조회 리스트 DTO로 변환합니다.
+     * @param findMember 조회할 회원의 아이디
+     * @return 상품 리스트
+     */
+    private List<ProductListResponse> toMyProductList(Member findMember) {
+        return productService.getMyProductList(findMember.getId())
+                .stream().map(p -> ProductListResponse.builder()
+                        .id(p.getId())
+                        .title(p.getTitle())
+                        .price(p.getPrice())
+                        .thumbnailImage(
+                                p.getProductImages().size() == 0 ?
+                                        ProductImageNotInit.SERVER_FILE_NAME :
+                                        p.getProductImages().get(0).getServerFileName())
+                        .build()
+                ).collect(Collectors.toList());
     }
 
 }

@@ -94,7 +94,7 @@
 
     <div class="div1" th:each="product : ${productList}" >
         <div class="div2">
-            <a th:href="@{/product/{id}(id = ${product.id})}">
+            <a th:href="@{/products/{id}(id = ${product.id})}">
                 <img th:src="${product.thumbnailImage}" style="width:100%; height:100%">
             </a>
         </div>

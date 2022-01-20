@@ -1,6 +1,7 @@
 package com.numble.karrot.product.dto;
 
 import com.numble.karrot.product_image.domain.ProductImage;
+import com.numble.karrot.product_image.domain.ProductImageNotInit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,13 +22,13 @@ public class ProductDetailResponse {
     private int price;
     private String description;
     private String category;
-    private List<ProductImage> productImages;
+    private List<String> productImages;
     private Integer heartCount;
     private Integer replyCount;
 
     @Builder
     public ProductDetailResponse(Long id, String title, int price, String description,
-                                 String category, List<ProductImage> productImages, Integer heartCount, Integer replyCount) {
+                                 String category, List<String> productImages, Integer heartCount, Integer replyCount) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -36,6 +37,13 @@ public class ProductDetailResponse {
         this.productImages = productImages;
         this.heartCount = heartCount;
         this.replyCount = replyCount;
+    }
+
+    /**
+     * 상품에 사진이 없을 경우 기본 이미지를 세팅해줍니다.
+     */
+    public void addProductNotImage() {
+        productImages.add(ProductImageNotInit.SERVER_FILE_NAME);
     }
 
 }

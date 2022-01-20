@@ -68,6 +68,8 @@ public class ProductController {
         ProductDetailResponse responseProduct =
                 toProductDetailResponse(findProduct);
 
+        if(responseProduct.getProductImages().size()==0) responseProduct.addProductNotImage();
+
         Member member = memberService
                 .findMember(findProduct.getMember().getEmail());
         MemberFitResponse responseMember = toMemberFitResponse(member);
@@ -123,7 +125,8 @@ public class ProductController {
             }
         }
 
-        return "products/ProductList";
+        return "redirect:/products";
+        //return "products/ProductList";
 
     }
 
@@ -141,7 +144,10 @@ public class ProductController {
                 .category(product.getCategory().getValue())
                 .heartCount(product.getHeartCount())
                 .replyCount(product.getReplyCount())
-                .productImages(product.getProductImages())
+                .productImages(product.getProductImages()
+                        .stream()
+                        .map(p -> p.getServerFileName())
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -155,8 +161,9 @@ public class ProductController {
                         p.getId(),
                         p.getTitle(),
                         p.getPrice(),
-                        p.getProductImages().get(0).getServerFileName()
-                )).collect(Collectors.toList());
+                        p.getProductImages().size() == 0 ?
+                                ProductImageNotInit.SERVER_FILE_NAME : p.getProductImages().get(0).getServerFileName()
+                )).collect(Collectors.toList ());
     }
 
     /**
@@ -167,7 +174,7 @@ public class ProductController {
     private MemberFitResponse toMemberFitResponse(Member member) {
         return MemberFitResponse.builder()
                 .nickName(member.getNickName())
-                .profileImage( member.getMemberImage().getFilePath()+
+                .profileImage(
                         member.getMemberImage().getServerFileName())
                 .build();
     }

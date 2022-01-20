@@ -1,12 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
-    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
-    <meta charset="UTF-8">
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi" charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+
+.input-file-button{
+  padding: 6px 25px;
+  background-color:#FF931E;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+</style>
 <body>
-    내 프로필 업데이트 페이지
+    <form>
+        <div class="div-profile">
+            <div class="image">
+                <img th:src="${memberInfo.profileImage}">
+                <label class="input-file-button" for="inputFile">
+                    프로필 사진 선택하기
+                </label>
+                <input type="file" name="" style="display:none" id="inputFile">
+            </div>
+            <div>
+                <input type="text" name="" th:value="${memberInfo.profileImage}">
+            </div>
+            <div class="updateBtn">
+                <button onclick ="location.href='/join';">수정하기</button>
+            </div>
+        </div>
+    </form>
 </body>
-</html>

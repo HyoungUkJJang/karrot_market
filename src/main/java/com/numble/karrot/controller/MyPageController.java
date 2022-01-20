@@ -38,4 +38,9 @@ public class MyPageController {
         return "mypage/MyPage";
     }
 
+    @GetMapping("/update")
+    public String updatePage() {
+        return "mypage/MyProfileUpdate";
+    }
+
 }

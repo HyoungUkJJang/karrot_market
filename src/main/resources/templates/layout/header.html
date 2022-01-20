@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
+    <title>Title</title>
+</head>
+<body>
+<div class="div-header" th:fragment="authorize-fragment" align="center">
+    <div th:if="${#authorization.expr('isAuthenticated()')}">
+        <h6 th:text="${#authentication.name}"></h6>
+    </div>
+</div>
+</body>
+</html>

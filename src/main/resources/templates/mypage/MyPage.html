@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi" charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .div-header {
+        width:100%;
+        height:50px;
+        line-height: 50px;
+        border-bottom: 1px solid;
+    }
+    .div-profile {
+        width:100%;
+        height:200px;
+    }
+    .div-profile .image {
+        margin-top: 20px;
+        width:100%;
+        height:100px;
+    }
+    .div-profile .image img{
+        margin-left:20px;;
+        width:50px;
+        height:50px;
+    }
+    .div-profile .updateBtn {
+        width:100%;
+        height:50px;
+        text-align:center
+    }
+    .div-profile .updateBtn button{
+        margin-top:15px;
+        width:80%;
+        height:30px;
+        text-align:center
+    }
+    .div-index {
+        width:100%;
+        height:100px;
+        text-align:center;
+        line-height: 100px;
+    }
+    .div-index .left {
+        width:30%;
+        height:100px;
+        float:left;
+        text-align:center
+    }
+    .div-index .left img{
+        width:50px;
+        height:50px;
+        margin-top: 25px;
+    }
+    .div-index .right {
+        width: 70%;
+        height: 100px;
+        float:right;
+        text-align:center;
+        line-height: 100px;
+    }
+    .div-footer{
+        width: 100%;
+        height: 88px;
+        /* background-color: orange; */
+        border: 1px;
+        /* border: solid; */
+        border-top-width: thin;
+        border-style: solid;
+    }
+        .div-footer-left {
+        width:50%;
+        height:88px;
+        float: left;
+        text-align:center;
+        margin-top:15px;
+    }
+    .div-footer-right {
+        width:50%;
+        height:88px;
+        float: right;
+        text-align:center;
+        margin-top:15px;
+    }
+     .h6-footer {
+        display: block;
+        font-size: 0.67em;
+        margin-block-start: 0em;
+        margin-block-end: 1em;
+        margin-inline-start: 5px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+</style>
+<body>
+<div class="div-header">
+    나의당근
+</div>
+<div class="div-profile">
+    <div class="image">
+        <img src="">
+        닉네임
+    </div>
+    <div class="updateBtn">
+        <button>수정하기</button>
+    </div>
+</div>
+<div class="div-index">
+    <div class="left"> <img src="/images/sellBtn.png"/> </div>
+    <div class="right"> <a href="/mypage/products">판매내역</a> </div>
+</div>
+<div class="div-index">
+    <div class="left"> <img src="/images/heartBtn.png"/> </div>
+    <div class="right"> 관심내역 </div>
+</div>
+<div class="div-index">
+    <p sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></p>
+</div>
+
+<div th:replace="layout/footer :: authorize-fragment"/>
+</body>
+</html>

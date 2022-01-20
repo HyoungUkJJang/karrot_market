@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
@@ -51,6 +52,16 @@ public class Member extends BaseEntity {
         this.phone = phone;
         this.nickName = nickName;
         this.memberRole = memberRole;
+    }
+
+    /**
+     * 회원의 비밀번호를 암호화 합니다.
+     * @param passwordEncoder 암호화 할 인코더 클래스
+     * @return 변경된 유저 도메인
+     */
+    public Member pwdEncode(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+        return this;
     }
 
     /**

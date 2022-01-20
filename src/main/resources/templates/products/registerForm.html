@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
+    <meta charset="utf-8">
+</head>
+<body>
+
+<form action="/products/register" method="post" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="제목">
+    <input type="number" name="price" placeholder="가격">
+    <select th:name="category">
+        <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.value}"></option>
+    </select>
+    <input type="text" name="description" placeholder="설명">
+    <input type="file" multiple name="productImages">
+    <input type="submit" value="등록">
+</form>
+
+</body>
+</html>

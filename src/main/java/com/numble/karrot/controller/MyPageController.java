@@ -1,6 +1,7 @@
 package com.numble.karrot.controller;
 
 import com.numble.karrot.member.domain.Member;
+import com.numble.karrot.member.dto.MemberFitResponse;
 import com.numble.karrot.member.service.MemberService;
 import com.numble.karrot.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,18 @@ public class MyPageController {
     private final MemberService memberService;
     private final ProductService productService;
 
+    /**
+     * 마이페이지로 이동합니다.
+     * @param userDetails 회원을 조회 할 로그인 된 사용자 정보
+     * @param model 사용자 정보를 담을 모델
+     * @return 마이 페이지 url
+     */
     @GetMapping
     public String myPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
-
+        MemberFitResponse memberFitResponse = new MemberFitResponse(member.getNickName(), member.getMemberImage().getServerFileName());
+        model.addAttribute("memberInfo", memberFitResponse);
         return "mypage/MyPage";
     }
 

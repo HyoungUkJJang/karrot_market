@@ -57,14 +57,14 @@ public class ProductController {
 
     /**
      * 상품 상세조회 페이지 이동
-     * @param id 상세조회 할 상품의 아이디
+     * @param product_id 상세조회 할 상품의 아이디
      * @param model 상품 상세정보, 회원 정보를 담을 모델
      * @return 상품 상세조회 페이지 url
      */
-    @GetMapping("/{id}")
-    public String detailProduct(@PathVariable Long id, Model model) {
+    @GetMapping("/{product_id}")
+    public String detailProduct(@PathVariable Long product_id, Model model) {
 
-        Product findProduct = productService.findProduct(id);
+        Product findProduct = productService.findProduct(product_id);
         ProductDetailResponse responseProduct =
                 toProductDetailResponse(findProduct);
 
@@ -74,6 +74,7 @@ public class ProductController {
                 .findMember(findProduct.getMember().getEmail());
         MemberFitResponse responseMember = toMemberFitResponse(member);
 
+        model.addAttribute("pageInfo", product_id);
         model.addAttribute("productDetail", responseProduct);
         model.addAttribute("memberInfo", responseMember);
 
@@ -92,6 +93,26 @@ public class ProductController {
         model.addAttribute("categoryList", categoryService.getCategoryList());
         return "products/registerForm";
 
+    }
+
+    @GetMapping("/{product_id}/memberProducts/{member_id}")
+    public String memberProductsPage(@PathVariable Long product_id, @PathVariable Long member_id, Model model) {
+        List<ProductListResponse> productList = productService.getMemberProductList(member_id)
+                .stream().map(p -> ProductListResponse.builder()
+                        .id(p.getId())
+                        .title(p.getTitle())
+                        .price(p.getPrice())
+                        .thumbnailImage(
+                                p.getProductImages().size() == 0 ?
+                                        ProductImageNotInit.SERVER_FILE_NAME :
+                                        p.getProductImages().get(0).getServerFileName()
+                        ).build())
+                .collect(Collectors.toList());
+
+        model.addAttribute("pageInfo", product_id);
+        model.addAttribute("memberInfo", member_id);
+        model.addAttribute("productList", productList);
+        return "products/MemberProductList";
     }
 
     /**
@@ -129,6 +150,8 @@ public class ProductController {
         //return "products/ProductList";
 
     }
+
+    @GetMapping("/")
 
     /**
      * 상품 상세조회 DTO로 변환합니다.
@@ -173,6 +196,7 @@ public class ProductController {
      */
     private MemberFitResponse toMemberFitResponse(Member member) {
         return MemberFitResponse.builder()
+                .memberId(member.getId())
                 .nickName(member.getNickName())
                 .profileImage(
                         member.getMemberImage().getServerFileName())

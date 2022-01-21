@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+   .div-header {
+        width:100%;
+        height:50px;
+        line-height: 70px;
+    }
+
+   .div-header img{
+        width:30px;
+        height:30px;
+        margin-left:15px;
+    }
+
+    .div-profile{
+    width:100%;
+    height:60px;
+    }
+
+   .div-profile img{
+    width:45px;
+    height:45px;
+    margin-left:30px;
+    margin-top:7px;
+    border-radius: 70px;
+}
+</style>
+<body>
+<div th:replace="layout/ReplyRegisterHeader :: authorize-fragment"/>
+
+    <div class="div-profile" th:each="reply : ${replyList}" >
+            <span>
+                <img th:src="${reply.memberProfile}"/>
+            </span>
+        <span th:text="${reply.comment}"></span>
+    </div>
+
+    <input type="submit" value="댓글 등록하러 가기" class="registerBtn">
+
+</body>
+</html>

@@ -10,11 +10,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MemberFitResponse {
 
+    private Long memberId;
     private String nickName;
     private String profileImage;
 
     @Builder
-    public MemberFitResponse(String nickName, String profileImage) {
+    public MemberFitResponse(Long memberId, String nickName, String profileImage) {
+        this.memberId = memberId;
         this.nickName = nickName;
         this.profileImage = profileImage;
     }

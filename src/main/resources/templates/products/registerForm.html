@@ -15,7 +15,7 @@
     <select th:name="category">
         <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.value}"></option>
     </select>
-    <input type="text" name="description" placeholder="설명">
+    <textarea name="description" placeholder="설명입력란"></textarea>
     <input type="file" multiple name="productImages">
     <input type="submit" value="등록">
 </form>

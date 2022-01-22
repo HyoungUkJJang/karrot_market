@@ -1,12 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
     minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
 </head>
 <body>
-    내 상품 업데이트 페이지
+
+<form th:action="@{/mypage/products/{product_id}/update(product_id=${myProduct.id})}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="${myProduct.id}">
+    <input type="text" name="title"  th:value="${myProduct.title}" placeholder="제목">
+    <input type="number" name="price"th:value="${myProduct.price}" placeholder="가격">
+    <select name="category">
+        <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.value}" th:selected="${category?.value eq myProduct?.category}"></option>
+    </select>
+    <textarea name="description" th:text="${myProduct.description}" placeholder="설명입력란"></textarea>
+    <input type="file" multiple name="productImages">
+    <input type="submit" value="등록">
+</form>
+
 </body>
 </html>

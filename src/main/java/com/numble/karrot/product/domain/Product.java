@@ -61,6 +61,19 @@ public class Product extends BaseEntity {
     }
 
     /**
+     * 상품을 수정합니다.
+     * @param product 수정될 상품의 정보
+     * @return 수정된 정보
+     */
+    public Product update(Product product) {
+        this.title = product.getTitle();
+        this.price = product.getPrice();
+        this.description = product.getDescription();
+        this.category = product.getCategory();
+        return this;
+    }
+
+    /**
      * 관심 갯수를 증가시킵니다.
      */
     public void addHeartCount() {
@@ -72,6 +85,20 @@ public class Product extends BaseEntity {
      */
     public void deleteHeartCount() {
         this.heartCount--;
+    }
+
+    /**
+     * 댓글 갯수를 증가시킵니다.
+     */
+    public void addReplyCount() {
+        this.replyCount++;
+    }
+
+    /**
+     * 댓글 갯수를 하나 감소합니다.
+     */
+    public void deleteReplyCount() {
+        this.replyCount--;
     }
 
 }

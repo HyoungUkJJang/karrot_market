@@ -10,13 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional
     public Product register(Product product) {
         return productRepository.save(product);
     }
@@ -40,6 +41,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getMemberProductList(Long memberId) {
         return productRepository.findByMemberId(memberId);
+    }
+
+    @Override
+    @Transactional
+    public Product updateProduct(Long product_id, Product updateForm) {
+        return findProduct(product_id)
+                .update(updateForm);
     }
 
 }

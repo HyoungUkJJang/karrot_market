@@ -1,5 +1,6 @@
 package com.numble.karrot.product.dto;
 
+import com.numble.karrot.product.domain.ProductStatus;
 import com.numble.karrot.product_image.domain.ProductImage;
 import com.numble.karrot.product_image.domain.ProductImageNotInit;
 import lombok.Builder;
@@ -21,18 +22,19 @@ public class ProductDetailResponse {
     private String title;
     private int price;
     private String description;
+    private ProductStatus productStatus;
     private String category;
     private List<String> productImages;
     private Integer heartCount;
     private Integer replyCount;
 
     @Builder
-    public ProductDetailResponse(Long id, String title, int price, String description,
-                                 String category, List<String> productImages, Integer heartCount, Integer replyCount) {
+    public ProductDetailResponse(Long id, String title, int price, String description, ProductStatus productStatus, String category, List<String> productImages, Integer heartCount, Integer replyCount) {
         this.id = id;
         this.title = title;
         this.price = price;
         this.description = description;
+        this.productStatus = productStatus;
         this.category = category;
         this.productImages = productImages;
         this.heartCount = heartCount;

@@ -13,8 +13,10 @@ import com.numble.karrot.trade.service.TradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -34,7 +36,8 @@ public class CommonController {
      * @return 회원가입 페이지 url
      */
     @GetMapping("/join")
-    public String joinPage() {
+    public String joinPage(Model model) {
+        model.addAttribute("form", new MemberJoinRequest());
         return "join";
     }
 
@@ -45,7 +48,7 @@ public class CommonController {
      */
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.CREATED)
-    public String joinProc(@Validated MemberJoinRequest form) {
+    public String joinProc(@ModelAttribute @Validated MemberJoinRequest form) {
 
         // 이메일 중복 시 예외
         if (duplicateCheck(form.getEmail())) throw new MemberEmailDuplicateException();

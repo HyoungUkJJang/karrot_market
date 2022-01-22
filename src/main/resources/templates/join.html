@@ -47,17 +47,17 @@ input {
 
   <div class="box1">
     <div class="box1_child">
-      <form action="/join" method="post">
+      <form th:action="@{/join}" th:object="${form}" method="post">
         <h4>이메일(ID)</h4>
-        <input type="email" name="email", placeholder="아이디를 입력해주세요"/>
+        <input type="email" th:field="*{email}" placeholder="아이디를 입력해주세요"/>
         <h4>비밀번호(PWD)</h4>
-        <input type = "password" name="password", placeholder="패스워드를 입력해주세요"/>
+        <input type = "password" th:field="*{password}" placeholder="패스워드를 입력해주세요"/>
         <h4>이름</h4>
-        <input type="text" name="name", placeholder="이름을 입력해주세요"/>
+        <input type="text" th:field="*{name}" placeholder="이름을 입력해주세요"/>
         <h4>핸드폰번호</h4>
-        <input type="text" name="phone", placeholder="핸드폰번호를 입력해주세요"/>
+        <input type="text" th:field="*{phone}" placeholder="핸드폰번호를 입력해주세요"/>
         <h4>닉네임</h4>
-        <input type="text" name="nickName", placeholder="닉네임을 입력해주세요"/><br><br>
+        <input type="text" th:field="*{nickName}" placeholder="닉네임을 입력해주세요"/><br><br>
         <input type="submit" class="btn1" value="가입하기">
       </form>
     </div>

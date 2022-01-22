@@ -8,16 +8,16 @@
 </head>
 <body>
 
-<form th:action="@{/mypage/products/{product_id}/update(product_id=${myProduct.id})}" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="id" th:value="${myProduct.id}">
-    <input type="text" name="title"  th:value="${myProduct.title}" placeholder="제목">
-    <input type="number" name="price"th:value="${myProduct.price}" placeholder="가격">
-    <select name="category">
-        <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.value}" th:selected="${category?.value eq myProduct?.category}"></option>
+<form th:action="@{/mypage/products/{product_id}/update(product_id=${productId})}" th:object="${form}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" th:value="${productId}">
+    <input type="text"  th:field="*{title}" th:value="*{title}" placeholder="제목">
+    <input type="number" th:field="*{price}" th:value="*{price}" placeholder="가격">
+    <select th:field="*{category}" name="category">
+        <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.value}" th:selected="${category?.value eq form?.category}"></option>
     </select>
-    <textarea name="description" th:text="${myProduct.description}" placeholder="설명입력란"></textarea>
-    <input type="file" multiple name="productImages">
-    <input type="submit" value="등록">
+    <textarea th:field="*{description}" th:text="*{description}" placeholder="설명입력란"></textarea>
+    <input type="file"  th:field="*{productImages}" multiple>
+    <input type="submit" value="수정하기">
 </form>
 
 </body>

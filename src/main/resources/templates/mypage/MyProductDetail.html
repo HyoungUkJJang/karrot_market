@@ -129,17 +129,17 @@ ul.imgs li{
 <body>
 <!--상품이미지 부분-->
 <div class="div-image">
-    <input type="hidden" id="pageInfo" th:value="${myProduct.id}">
+    <input type="hidden" id="pageInfo" th:value="${product.id}">
     <div class="slider">
 
-        <input type="radio" th:each="item, i : ${myProduct.productImages}" name="slide" th:id="'slide'+${i.index}" checked>
+        <input type="radio" th:each="item, i : ${product.productImages}" name="slide" th:id="'slide'+${i.index}" checked>
 
         <ul id="imgholder" class="imgs">
-            <li th:each="item : ${myProduct.productImages}"><img th:src="${item}" style="width:320px; height:258px"></li>
+            <li th:each="item : ${product.productImages}"><img th:src="${item}" style="width:320px; height:258px"></li>
         </ul>
 
         <div class="bullets">
-            <label  th:each="item, i : ${myProduct.productImages}" th:for="'slide'+${i.index}">&nbsp;</label>
+            <label  th:each="item, i : ${product.productImages}" th:for="'slide'+${i.index}">&nbsp;</label>
         </div>
 
     </div>
@@ -148,35 +148,35 @@ ul.imgs li{
 
 <div class="div-profile">
         <span>
-            <img th:src="${memberFitResponse.profileImage}"/>
+            <img th:src="${memberInfo.profileImage}"/>
         </span>
-    <span th:text="${memberFitResponse.nickName}"></span>
+    <span th:text="${memberInfo.nickName}"></span>
 </div>
 <div class="div-info">
-    <div th:text="${myProduct.title}"></div>
-    <div th:text="${myProduct.price}"></div>
-    <div th:text="${myProduct.category}"></div>
-    <div th:text="${myProduct.description}"></div>
+    <div th:text="${product.title}"></div>
+    <div th:text="${product.price}"></div>
+    <div th:text="${product.category}"></div>
+    <div th:text="${product.description}"></div>
 </div>
 
 //수정부분
 <div>
-    <a th:href="@{/mypage/products/{product_id}/update(product_id=${myProduct.id})}">수정하기</a>
+    <a th:href="@{/mypage/products/{product_id}/update(product_id=${product.id})}">수정하기</a>
 </div>
 
 <div class = "div-footer">
     <div class="sub1">
-        <button th:if="${#lists.contains(memberFitResponse?.heartProducts, myProduct.id)}" class ="heartBtn"  type="button" id="btn-deleteHeart">
+        <button th:if="${#lists.contains(memberInfo?.heartProducts, product.id)}" class ="heartBtn"  type="button" id="btn-deleteHeart">
             <img src="/images/realHeartBtn.png" style="width:40px; height:40px" id="heart_img">
         </button>
-        <button th:unless="${#lists.contains(memberFitResponse?.heartProducts, myProduct.id)}"  class="heartBtn" type="button" id="btn-heart">
+        <button th:unless="${#lists.contains(memberInfo?.heartProducts, product.id)}"  class="heartBtn" type="button" id="btn-heart">
             <img src="/images/heartBtn.png" style="width:40px; height:40px" id="heart_img">
         </button>
         <img src="/images/sellBtn.png" style="width:40px; height:40px">
     </div>
     <div class="sub2">
-        <a th:href="@{/products/{product_id}/reply/register(product_id=${myProduct.id})}">댓글 남기기</a>
-        <a th:href="@{/products/{product_id}/reply(product_id=${myProduct.id})}">댓글 보기</a>
+        <a th:href="@{/products/{product_id}/reply/register(product_id=${product.id})}">댓글 남기기</a>
+        <a th:href="@{/products/{product_id}/reply(product_id=${product.id})}">댓글 보기</a>
     </div>
 </div>
 

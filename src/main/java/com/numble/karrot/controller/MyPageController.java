@@ -122,7 +122,7 @@ public class MyPageController {
         String email = userDetails.getUsername();
         Member findMember = memberService.findMember(email);
         List<ProductListResponse> myProducts = toMyProductList(findMember);
-        model.addAttribute("myProducts", myProducts);
+        model.addAttribute("productList", myProducts);
 
         return "mypage/MyProducts";
     }
@@ -143,8 +143,8 @@ public class MyPageController {
         Product product = productService.findProduct(product_id);
         ProductDetailResponse myProduct = toMyProductDetail(product);
 
-        model.addAttribute("memberFitResponse", memberFitResponse);
-        model.addAttribute("myProduct", myProduct);
+        model.addAttribute("memberInfo", memberFitResponse);
+        model.addAttribute("product", myProduct);
 
         return "mypage/MyProductDetail";
     }
@@ -153,9 +153,16 @@ public class MyPageController {
     public String myProductUpdatePage(@PathVariable Long product_id, Model model) {
 
         Product product = productService.findProduct(product_id);
-        ProductDetailResponse myProduct = toMyProductDetail(product);
+        ProductUpdateRequest form = ProductUpdateRequest.builder()
+                .title(product.getTitle())
+                .price(product.getPrice())
+                .category(product.getCategory())
+                .description(product.getDescription())
+                .build();
         List<Category> categoryList = categoryService.getCategoryList();
-        model.addAttribute("myProduct", myProduct);
+
+        model.addAttribute("productId", product_id);
+        model.addAttribute("form", form);
         model.addAttribute("categoryList", categoryList);
         return "mypage/MyProductUpdate";
 

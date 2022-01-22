@@ -49,7 +49,11 @@ public class MyPageController {
 
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
-        MemberFitResponse memberFitResponse = new MemberFitResponse(member.getId(), member.getNickName(), member.getMemberImage().getServerFileName());
+        MemberFitResponse memberFitResponse = new MemberFitResponse(
+                member.getId(),
+                member.getNickName(),
+                member.getMemberImage().getServerFileName(),
+                member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList()));
         model.addAttribute("memberFitResponse", memberFitResponse);
 
         return "mypage/MyPage";
@@ -66,7 +70,11 @@ public class MyPageController {
 
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
-        MemberFitResponse memberFitResponse = new MemberFitResponse(member.getId(), member.getNickName(), member.getMemberImage().getServerFileName());
+        MemberFitResponse memberFitResponse = new MemberFitResponse(
+                member.getId(),
+                member.getNickName(),
+                member.getMemberImage().getServerFileName(),
+                member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList()));
         model.addAttribute("memberFitResponse", memberFitResponse);
 
         return "mypage/MyProfileUpdate";

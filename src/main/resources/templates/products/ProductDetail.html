@@ -121,11 +121,15 @@ ul.imgs li{
     transition: 0.5s;
     z-index:1;
 }
+.heartBtn {
+    background-color: transparent;
+    border: none;
+}
 </style>
 <body>
 <!--상품이미지 부분-->
 <div class="div-image">
-
+    <input type="hidden" id="pageInfo" th:value="${pageInfo}">
     <div class="slider">
 
         <input type="radio" th:each="item, i : ${productDetail.productImages}" name="slide" th:id="'slide'+${i.index}" checked>
@@ -162,7 +166,12 @@ ul.imgs li{
 </div>
 <div class = "div-footer">
     <div class="sub1">
-        <img src="/images/heartBtn.png" style="width:40px; height:40px">&nbsp;&nbsp;
+        <button th:if="${#lists.contains(myInfo?.heartProducts,pageInfo)}" class ="heartBtn"  type="button" id="btn-deleteHeart">
+            <img src="/images/realHeartBtn.png" style="width:40px; height:40px" id="heart_img">
+        </button>
+        <button th:unless="${#lists.contains(myInfo?.heartProducts,pageInfo)}"  class="heartBtn" type="button" id="btn-heart">
+            <img src="/images/heartBtn.png" style="width:40px; height:40px" id="heart_img">
+        </button>
         <img src="/images/sellBtn.png" style="width:40px; height:40px">
     </div>
     <div class="sub2">
@@ -170,5 +179,9 @@ ul.imgs li{
         <a th:href="@{/products/{product_id}/reply(product_id=${pageInfo})}">댓글 보기</a>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="/js/heart.js"></script>
 </body>
 </html>

@@ -60,4 +60,18 @@ public class Product extends BaseEntity {
         this.category = category;
     }
 
+    /**
+     * 관심 갯수를 증가시킵니다.
+     */
+    public void addHeartCount() {
+        this.heartCount++;
+    }
+
+    /**
+     * 관심 갯수를 하나 감소합니다.
+     */
+    public void deleteHeartCount() {
+        this.heartCount--;
+    }
+
 }

@@ -1,7 +1,9 @@
 package com.numble.karrot.member.domain;
 
 import com.numble.karrot.common.BaseEntity;
+import com.numble.karrot.heart.domain.Heart;
 import com.numble.karrot.member_image.domain.MemberImage;
+import com.numble.karrot.reply.domain.Reply;
 import com.numble.karrot.trade.domain.Trade;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +12,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 캐럿마켓 회원 도메인입니다.
@@ -42,6 +46,9 @@ public class Member extends BaseEntity {
 
     @OneToOne(mappedBy = "member")
     private Trade trade;
+
+    @OneToMany(mappedBy = "member")
+    private List<Heart> hearts = new ArrayList<>();
 
     @Builder
     public Member(String email, String password, String name, String phone, String nickName,

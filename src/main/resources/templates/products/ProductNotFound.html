@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi"
+          charset="UTF-8">
+    <title>Karrot 마켓 클론코딩 첼린지</title>
+</head>
+<style>
+.btn1 {
+    width:300px;
+    background-color: #FF931E;
+    border: none;
+    color:#fff;
+    padding: 15px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 7px;
+    font-size: 15px;
+    margin: 4px;
+    cursor: pointer;
+}
+.loginLink {
+    color:#FF931E;
+}
+.box1{
+    position: relative;
+    width:100%;
+    height: 500px;
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 정렬 */
+}
+.box1_child {
+    position: absolute;
+    text-align: center;
+}
+
+.box2{
+    width:100%;
+    height: 150px;
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    justify-content: center; /* 수평 정렬 */
+}
+.box2_child {
+    text-align: center;
+}
+
+</style>
+<body>
+
+<div id="eee" class="box1">
+    <div class="box1_child">
+        <img src="/images/carrot.png" style="max-width:150px; height:auto;">
+        <h2>조회하신 물건이 없습니당! </h2>
+    </div>
+</div>
+
+<div class="box2">
+    <div class="box2_child">
+        <button class="btn1" onclick ="location.href='/products';" >상품목록으로 돌아가기</button><br><br>
+    </div>
+</div>
+
+</body>
+</html>

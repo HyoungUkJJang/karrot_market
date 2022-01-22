@@ -2,6 +2,8 @@ package com.numble.karrot.controller;
 
 import com.numble.karrot.aws.service.S3Uploader;
 import com.numble.karrot.category.service.CategoryService;
+import com.numble.karrot.heart.domain.Heart;
+import com.numble.karrot.heart.service.HeartService;
 import com.numble.karrot.member.domain.Member;
 import com.numble.karrot.member.dto.MemberFitResponse;
 import com.numble.karrot.member.service.MemberService;
@@ -39,6 +41,7 @@ public class ProductController {
     private final ProductImageService productImageService;
     private final CategoryService categoryService;
     private final MemberService memberService;
+    private final HeartService heartService;
     private final S3Uploader s3Uploader;
 
     /**
@@ -57,26 +60,31 @@ public class ProductController {
 
     /**
      * 상품 상세조회 페이지 이동
+     *
      * @param product_id 상세조회 할 상품의 아이디
-     * @param model 상품 상세정보, 회원 정보를 담을 모델
+     * @param model      상품 상세정보, 회원 정보를 담을 모델
      * @return 상품 상세조회 페이지 url
      */
     @GetMapping("/{product_id}")
-    public String detailProduct(@PathVariable Long product_id, Model model) {
+    public String detailProduct(@PathVariable Long product_id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
 
         Product findProduct = productService.findProduct(product_id);
         ProductDetailResponse responseProduct =
                 toProductDetailResponse(findProduct);
 
-        if(responseProduct.getProductImages().size()==0) responseProduct.addProductNotImage();
+        if (responseProduct.getProductImages().size() == 0) responseProduct.addProductNotImage();
 
         Member member = memberService
                 .findMember(findProduct.getMember().getEmail());
         MemberFitResponse responseMember = toMemberFitResponse(member);
 
+        Member my = memberService.findMember(userDetails.getUsername());
+        MemberFitResponse myInfo = toMemberFitResponse(my);
+
         model.addAttribute("pageInfo", product_id);
         model.addAttribute("productDetail", responseProduct);
         model.addAttribute("memberInfo", responseMember);
+        model.addAttribute("myInfo", myInfo);
 
         return "products/ProductDetail";
 
@@ -108,11 +116,30 @@ public class ProductController {
                                         p.getProductImages().get(0).getServerFileName()
                         ).build())
                 .collect(Collectors.toList());
-
         model.addAttribute("pageInfo", product_id);
         model.addAttribute("memberInfo", member_id);
         model.addAttribute("productList", productList);
         return "products/MemberProductList";
+    }
+
+    @PostMapping("/{productId}/addHeart")
+    @ResponseBody
+    public String addHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
+        Member member = memberService.findMember(userDetails.getUsername());
+        Product product = productService.findProduct(productId);
+        heartService.addHeart(new Heart(
+                productId, member, product
+        ));
+        return "success";
+    }
+
+    @DeleteMapping("/{productId}/deleteHeart")
+    @ResponseBody
+    public String deleteHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
+        Member member = memberService.findMember(userDetails.getUsername());
+        heartService.deleteHeart(productId, member.getId());
+
+        return "success";
     }
 
     /**
@@ -152,7 +179,6 @@ public class ProductController {
     }
 
     @GetMapping("/")
-
     /**
      * 상품 상세조회 DTO로 변환합니다.
      * @param product 상품엔티티
@@ -200,6 +226,9 @@ public class ProductController {
                 .nickName(member.getNickName())
                 .profileImage(
                         member.getMemberImage().getServerFileName())
+                .heartProducts(
+                        member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList())
+                )
                 .build();
     }
 

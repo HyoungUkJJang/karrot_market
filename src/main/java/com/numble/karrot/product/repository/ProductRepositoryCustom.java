@@ -16,4 +16,6 @@ public interface ProductRepositoryCustom {
      */
     List<Product> findMyProducts(Long memberId);
 
+    List<Product> heartMyProducts(Long memberId);
+
 }

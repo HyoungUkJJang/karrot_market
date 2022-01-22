@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class ProductErrorControlle {
+public class ProductErrorController {
 
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

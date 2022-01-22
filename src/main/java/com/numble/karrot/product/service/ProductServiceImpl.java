@@ -50,4 +50,8 @@ public class ProductServiceImpl implements ProductService {
                 .update(updateForm);
     }
 
+    @Override
+    public List<Product> getMyHeartsProductList(Long memberId) {
+        return productRepository.heartMyProducts(memberId);
+    }
 }

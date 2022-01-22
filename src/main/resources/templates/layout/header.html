@@ -9,7 +9,7 @@
 <body>
 <div class="div-header" th:fragment="authorize-fragment" align="center">
     <div th:if="${#authorization.expr('isAuthenticated()')}">
-        <h6 th:text="${#authentication.name}"></h6>
+        <h3 th:text="${memberInfo.nickName}+' 님의동네'"></h3>
     </div>
 </div>
 </body>

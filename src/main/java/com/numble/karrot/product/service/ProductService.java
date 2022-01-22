@@ -45,4 +45,6 @@ public interface ProductService {
 
     Product updateProduct(Long product_id, Product updateForm);
 
+    List<Product> getMyHeartsProductList(Long memberId);
+
 }

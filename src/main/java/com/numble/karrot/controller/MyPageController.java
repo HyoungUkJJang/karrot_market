@@ -111,6 +111,14 @@ public class MyPageController {
         return "redirect:/mypage";
     }
 
+    @GetMapping("/hearts")
+    public String myHeartsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        Member findMember = memberService.findMember(userDetails.getUsername());
+        List<ProductListResponse> productList = toMyHeartProductList(findMember);
+        model.addAttribute("productList", productList);
+        return "mypage/MyHeartProducts";
+    }
+
     /**
      * 내가 올린 상품 페이지로 이동합니다.
      * @param userDetails
@@ -195,6 +203,25 @@ public class MyPageController {
      */
     private List<ProductListResponse> toMyProductList(Member findMember) {
         return productService.getMyProductList(findMember.getId())
+                .stream().map(p -> ProductListResponse.builder()
+                        .id(p.getId())
+                        .title(p.getTitle())
+                        .price(p.getPrice())
+                        .thumbnailImage(
+                                p.getProductImages().size() == 0 ?
+                                        ProductImageNotInit.SERVER_FILE_NAME :
+                                        p.getProductImages().get(0).getServerFileName())
+                        .build()
+                ).collect(Collectors.toList());
+    }
+
+    /**
+     * 나의 관심상풍 리스트 DTO로 변환합니다.
+     * @param findMember 조회할 회원의 아이디
+     * @return 상품 리스트
+     */
+    private List<ProductListResponse> toMyHeartProductList(Member findMember) {
+        return productService.getMyHeartsProductList(findMember.getId())
                 .stream().map(p -> ProductListResponse.builder()
                         .id(p.getId())
                         .title(p.getTitle())

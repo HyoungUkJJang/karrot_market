@@ -50,8 +50,14 @@ public class ProductController {
      * @return 상품리스트 페이지 url
      */
     @GetMapping
-    public String productsPage(Model model) {
+    public String productsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
+        Member findMember = memberService.findMember(userDetails.getUsername());
+        MemberFitResponse memberInfo = MemberFitResponse.builder()
+                .nickName(findMember.getNickName())
+                .build();
+
+        model.addAttribute("memberInfo", memberInfo);
         model.addAttribute("productList", toProductListResponse());
         return "products/ProductList";
 

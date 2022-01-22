@@ -9,14 +9,14 @@
 </head>
 <body>
 
-<form action="/products/register" method="post" enctype="multipart/form-data">
-    <input type="text" name="title" placeholder="제목">
-    <input type="number" name="price" placeholder="가격">
-    <select th:name="category">
+<form th:action="@{/products/register}" th:object="${form}" method="post" enctype="multipart/form-data">
+    <input type="text" th:field="*{title}" placeholder="제목">
+    <input type="number" th:field="*{price}"  placeholder="가격">
+    <select  th:field="*{category}">
         <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.value}"></option>
     </select>
-    <textarea name="description" placeholder="설명입력란"></textarea>
-    <input type="file" multiple name="productImages">
+    <textarea  th:field="*{description}" placeholder="설명입력란"></textarea>
+    <input type="file" th:field="*{productImages}" multiple >
     <input type="submit" value="등록">
 </form>
 

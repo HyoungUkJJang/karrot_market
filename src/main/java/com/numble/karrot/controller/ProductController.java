@@ -52,21 +52,20 @@ public class ProductController {
     @GetMapping
     public String productsPage(Model model) {
 
-        List<ProductListResponse> productList = toProductListResponse();
-        model.addAttribute("productList", productList);
+        model.addAttribute("productList", toProductListResponse());
         return "products/ProductList";
 
     }
 
     /**
      * 상품 상세조회 페이지 이동
-     *
      * @param product_id 상세조회 할 상품의 아이디
      * @param model      상품 상세정보, 회원 정보를 담을 모델
      * @return 상품 상세조회 페이지 url
      */
     @GetMapping("/{product_id}")
-    public String detailProduct(@PathVariable Long product_id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String detailProduct(@PathVariable Long product_id, @AuthenticationPrincipal UserDetails userDetails,
+                                Model model) {
 
         Product findProduct = productService.findProduct(product_id);
         ProductDetailResponse responseProduct =
@@ -81,12 +80,40 @@ public class ProductController {
         Member my = memberService.findMember(userDetails.getUsername());
         MemberFitResponse myInfo = toMemberFitResponse(my);
 
-        model.addAttribute("pageInfo", product_id);
-        model.addAttribute("productDetail", responseProduct);
-        model.addAttribute("memberInfo", responseMember);
+        model.addAttribute("product", responseProduct);
+        model.addAttribute("ownerInfo", responseMember);
         model.addAttribute("myInfo", myInfo);
 
         return "products/ProductDetail";
+
+    }
+
+    /**
+     * 회원 판매상품 페이지로 이동합니다.
+     * @param product_id 상품의 아이디
+     * @param owner_id 상품 주인의 아이디
+     * @param model 상품 주안의 판매상품을 담을 모델
+     * @return 상품페이지 url
+     */
+    @GetMapping("/{product_id}/memberProducts/{owner_id}")
+    public String memberProductsPage(@PathVariable Long product_id, @PathVariable Long owner_id, Model model) {
+
+        List<ProductListResponse> productList = productService.getMemberProductList(owner_id)
+                .stream().map(p -> ProductListResponse.builder()
+                        .id(p.getId())
+                        .title(p.getTitle())
+                        .price(p.getPrice())
+                        .thumbnailImage(
+                                p.getProductImages().size() == 0 ?
+                                        ProductImageNotInit.SERVER_FILE_NAME :
+                                        p.getProductImages().get(0).getServerFileName()
+                        ).build())
+                .collect(Collectors.toList());
+
+        model.addAttribute("pageInfo", product_id);
+        model.addAttribute("productList", productList);
+
+        return "products/MemberProductList";
 
     }
 
@@ -98,48 +125,10 @@ public class ProductController {
     @GetMapping("/register")
     public String registerPage(Model model) {
 
+        model.addAttribute("form", new ProductRegisterRequest());
         model.addAttribute("categoryList", categoryService.getCategoryList());
         return "products/registerForm";
 
-    }
-
-    @GetMapping("/{product_id}/memberProducts/{member_id}")
-    public String memberProductsPage(@PathVariable Long product_id, @PathVariable Long member_id, Model model) {
-        List<ProductListResponse> productList = productService.getMemberProductList(member_id)
-                .stream().map(p -> ProductListResponse.builder()
-                        .id(p.getId())
-                        .title(p.getTitle())
-                        .price(p.getPrice())
-                        .thumbnailImage(
-                                p.getProductImages().size() == 0 ?
-                                        ProductImageNotInit.SERVER_FILE_NAME :
-                                        p.getProductImages().get(0).getServerFileName()
-                        ).build())
-                .collect(Collectors.toList());
-        model.addAttribute("pageInfo", product_id);
-        model.addAttribute("memberInfo", member_id);
-        model.addAttribute("productList", productList);
-        return "products/MemberProductList";
-    }
-
-    @PostMapping("/{productId}/addHeart")
-    @ResponseBody
-    public String addHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
-        Member member = memberService.findMember(userDetails.getUsername());
-        Product product = productService.findProduct(productId);
-        heartService.addHeart(new Heart(
-                productId, member, product
-        ));
-        return "success";
-    }
-
-    @DeleteMapping("/{productId}/deleteHeart")
-    @ResponseBody
-    public String deleteHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
-        Member member = memberService.findMember(userDetails.getUsername());
-        heartService.deleteHeart(productId, member.getId());
-
-        return "success";
     }
 
     /**
@@ -150,7 +139,7 @@ public class ProductController {
      * @throws IOException
      */
     @PostMapping("/register")
-    public String registerProc(@Validated ProductRegisterRequest form,
+    public String registerProc(@ModelAttribute @Validated ProductRegisterRequest form,
                                @AuthenticationPrincipal UserDetails userDetails) throws IOException {
 
         Member findMember = memberService.findMember(userDetails.getUsername());
@@ -174,11 +163,30 @@ public class ProductController {
         }
 
         return "redirect:/products";
-        //return "products/ProductList";
 
     }
 
-    @GetMapping("/")
+    @PostMapping("/{productId}/addHeart")
+    @ResponseBody
+    public String addHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
+        Member member = memberService.findMember(userDetails.getUsername());
+        Product product = productService.findProduct(productId);
+        heartService.addHeart(new Heart(
+                productId, member, product
+        ));
+        return "success";
+    }
+
+    @DeleteMapping("/{productId}/deleteHeart")
+    @ResponseBody
+    public String deleteHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
+        Member member = memberService.findMember(userDetails.getUsername());
+        heartService.deleteHeart(productId, member.getId());
+
+        return "success";
+    }
+
+
     /**
      * 상품 상세조회 DTO로 변환합니다.
      * @param product 상품엔티티

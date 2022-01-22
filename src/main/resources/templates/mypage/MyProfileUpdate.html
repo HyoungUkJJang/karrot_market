@@ -43,19 +43,19 @@
 <div class="div-profile">
 
         <div class="image">
-            <img th:src="${memberFitResponse?.profileImage}" id="image" style="width: 45%; height: 160px; border-radius: 70%;">
+            <img th:src="${profileImage}" id="image" style="width: 45%; height: 160px; border-radius: 70%;">
         </div>
 
-    <form action="/mypage/update" method="post" enctype="multipart/form-data">
+    <form th:action="@{/mypage/update}" th:object="${form}"  method="post" enctype="multipart/form-data">
         <div class="imageFile">
                 <label class="input-file-button" for="files">
                     프로필 사진 선택하기
                  </label>
-                 <input type="file" id="files" name="memberImage" style="display:none">
+                 <input type="file" id="files" th:field="*{memberImage}" style="display:none">
         </div>
 
         <div>
-            <input type="text" name="nickName" th:value="${memberFitResponse?.nickName}">
+            <input type="text" th:field="*{nickName}" th:value="${form?.nickName}">
         </div>
 
         <div class="updateBtn">

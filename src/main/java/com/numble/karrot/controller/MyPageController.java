@@ -54,12 +54,13 @@ public class MyPageController {
 
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
-        MemberFitResponse memberFitResponse = new MemberFitResponse(
-                member.getId(),
-                member.getNickName(),
-                member.getMemberImage().getServerFileName(),
-                member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList()));
-        model.addAttribute("memberFitResponse", memberFitResponse);
+        MemberFitResponse memberInfo = MemberFitResponse.builder()
+                .memberId(member.getId())
+                .nickName(member.getNickName())
+                .profileImage(member.getMemberImage().getServerFileName())
+                .build();
+
+        model.addAttribute("memberInfo", memberInfo);
 
         return "mypage/MyPage";
     }
@@ -75,15 +76,39 @@ public class MyPageController {
 
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
-        MemberFitResponse memberFitResponse = new MemberFitResponse(
-                member.getId(),
-                member.getNickName(),
-                member.getMemberImage().getServerFileName(),
-                member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList()));
-        model.addAttribute("memberFitResponse", memberFitResponse);
+
+        MemberUpdateRequest form = MemberUpdateRequest.builder()
+                .nickName(member.getNickName())
+                .build();
+
+        model.addAttribute("form", form);
+        model.addAttribute("profileImage", member.getMemberImage().getServerFileName());
 
         return "mypage/MyProfileUpdate";
 
+    }
+
+    /**
+     * 회원정보를 수정합니다.
+     * @param form 수정할 정보
+     * @return 다시 마이페이지로 이동합니다.
+     */
+    @PostMapping("/update")
+    public String updateProc(@AuthenticationPrincipal UserDetails userDetails,@ModelAttribute MemberUpdateRequest form) throws IOException {
+        String email = userDetails.getUsername();
+        Member member = memberService.findMember(email);
+
+        if (!form.getMemberImage().isEmpty()) {
+
+            MemberImage memberImage = memberImageService.findMemberImage(member.getId());
+            String serverUrl = s3Uploader.upload(form.getMemberImage(), "members");
+            memberImageService.updateMemberImage(memberImage, "members",
+                    form.getMemberImage().getOriginalFilename(), serverUrl);
+
+        }
+        memberService.update(member, form.getNickName());
+
+        return "redirect:/mypage";
     }
 
     /**
@@ -154,29 +179,6 @@ public class MyPageController {
 
         return "redirect:/mypage/products/" + product_id;
 
-    }
-
-    /**
-     * 회원정보를 수정합니다.
-     * @param form 수정할 정보
-     * @return 다시 마이페이지로 이동합니다.
-     */
-    @PostMapping("/update")
-    public String updateProc(@AuthenticationPrincipal UserDetails userDetails, MemberUpdateRequest form) throws IOException {
-        String email = userDetails.getUsername();
-        Member member = memberService.findMember(email);
-
-        if (!form.getMemberImage().isEmpty()) {
-
-            MemberImage memberImage = memberImageService.findMemberImage(member.getId());
-            String serverUrl = s3Uploader.upload(form.getMemberImage(), "members");
-            memberImageService.updateMemberImage(memberImage, "members",
-                    form.getMemberImage().getOriginalFilename(), serverUrl);
-
-        }
-        memberService.update(member, form.getNickName());
-
-        return "redirect:/mypage";
     }
 
     /**

@@ -1,8 +1,11 @@
 package com.numble.karrot.aws.service;
 
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.numble.karrot.product.domain.Product;
 import com.numble.karrot.product_image.domain.ProductImage;
@@ -33,6 +36,8 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
 
+    private String originalFileName = "";
+
     /**
      * 상품이미지를 버킷에 올리고 데이터베이스에 저장하기위해 엔티티 리스트를 반환합니다.
      * @param multipartFiles 이미지 파일리스트
@@ -47,8 +52,8 @@ public class S3Uploader {
             String uploadImageUrl = upload(multipartFile, dirName);
             productImages.add(
                     ProductImage.builder()
-                            .filePath(dirName)
-                            .originalFileName(multipartFile.getOriginalFilename())
+                            .filePath(dirName + "/")
+                            .originalFileName(originalFileName)
                             .serverFileName(uploadImageUrl)
                             .product(product)
                             .build());
@@ -79,7 +84,8 @@ public class S3Uploader {
      * @return 저장된 버킷 이미지 url
      */
     public String upload(File uploadFile, String dirName) {
-        String fileName = dirName + "/" + UUID.randomUUID() + uploadFile.getName();
+        originalFileName = UUID.randomUUID() + uploadFile.getName();
+        String fileName = dirName + "/" + originalFileName;
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
         return uploadImageUrl;
@@ -118,7 +124,7 @@ public class S3Uploader {
     private Optional<File> convert(MultipartFile file) throws IOException {
 
         File convertFile = new File("/home/ec2-user/files/"+ file.getOriginalFilename());
-//        File convertFile = new File("/Users/uh/Desktop/files"+ file.getOriginalFilename());
+//       File convertFile = new File("/Users/uh/Desktop/files"+ file.getOriginalFilename());
         if (convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(file.getBytes());
@@ -127,6 +133,24 @@ public class S3Uploader {
         }
         return Optional.empty();
 
+    }
+
+    /**
+     * 상품을 삭제합니다.
+     * @param serverFileName
+     */
+    public void delete(String serverFileName) {
+        try {
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, serverFileName);
+            //Delete
+            this.amazonS3Client.deleteObject(deleteObjectRequest);
+            System.out.println(String.format("[%s] deletion complete", serverFileName));
+
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
     }
 
 }

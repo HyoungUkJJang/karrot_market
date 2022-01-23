@@ -100,10 +100,28 @@
         </div>
 
         <div class="div3">
-            <h6 th:text="${product.title}" class="h6-text"></h6>
+            <h6 th:if="${product?.productStatus.value} == '거래중'" th:text="${product.title}"></h6>
+            <h6 th:if="${product?.productStatus.value} == '예약중'" th:text="'[예약중] '+${product.title}"></h6>
+            <h6 th:if="${product?.productStatus.value} == '거래완료'" th:text="'[거래완료] '+${product.title}"></h6>
             <h6 class="h6-text">장소</h6>
             <h6 th:text="${product.price}" class="h6-text"></h6>
-            <h6 class="h6-text">좋아요</h6>
+            <span style=" display: flex; justify-content: right;">
+             <span th:if="${product.replyCount > 0}" style="display:flex;">
+                    <img src="/images/sellBtn.png" style="width:15px; height:15px">
+                    <h6 class="h6-text" th:text="${product.replyCount}"></h6>
+             </span>
+                &nbsp;&nbsp;
+                <span th:if="${product.heartCount > 0}" style="display:flex;" >
+                 <div th:if="${#lists.contains(memberInfo?.heartProducts, product.id)}" style="display:flex;">
+                    <img  src="/images/realHeartBtn.png" style="width:15px; height:15px">
+                      <h6 class="h6-text" th:text="${product.heartCount}"></h6>
+                 </div>
+                    <div th:unless="${#lists.contains(memberInfo?.heartProducts, product.id)}" style="display:flex;">
+                     <img src="/images/heartBtn.png" style="width:15px; height:15px">
+                         <h6 class="h6-text" th:text="${product.heartCount}"></h6>
+                 </div>
+
+             </span>
         </div>
     </div>
     <a href="/products/register"><img class="add-btn" src="/images/addBtn.png"></a>

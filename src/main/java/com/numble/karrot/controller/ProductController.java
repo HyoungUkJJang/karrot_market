@@ -108,6 +108,9 @@ public class ProductController {
                         .id(p.getId())
                         .title(p.getTitle())
                         .price(p.getPrice())
+                        .productStatus(p.getProductStatus())
+                        .heartCount(p.getHeartCount())
+                        .replyCount(p.getReplyCount())
                         .thumbnailImage(
                                 p.getProductImages().size() == 0 ?
                                         ProductImageNotInit.SERVER_FILE_NAME :

@@ -104,7 +104,20 @@
         margin-inline-end: 0px;
         font-weight: bold;
     }
-
+.btn1 {
+    width:50%;
+    background-color: #FF931E;
+    border: none;
+    color:#fff;
+    padding: 15px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 7px;
+    font-size: 15px;
+    argin: 4px;
+    cursor: pointer;
+}
 </style>
 <body>
 <div class="div-header">
@@ -112,10 +125,10 @@
 </div>
 <div class = "div-tab">
     <div class="left">
-       <a href="/mypage/products"> 판매중 </a>
+        <button class="btn1" onclick ="location.href='/mypage/products';" >판매중</button>
     </div>
     <div class="right">
-       <a href="/mypage/products/complete"> 거래완료 </a>
+        <button class="btn1" onclick ="location.href='/mypage/products/complete';" >거래완료</button>
     </div>
 </div>
 

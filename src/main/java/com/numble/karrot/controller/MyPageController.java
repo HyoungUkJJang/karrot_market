@@ -121,6 +121,12 @@ public class MyPageController {
         return "redirect:/mypage";
     }
 
+    /**
+     * 관심상품 페이지로 이동합니다.
+     * @param userDetails 유저정보
+     * @param model 관심상품 목록을 담을 모델
+     * @return 관심상품 url
+     */
     @GetMapping("/hearts")
     public String myHeartsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         Member findMember = memberService.findMember(userDetails.getUsername());
@@ -171,17 +177,10 @@ public class MyPageController {
         String email = userDetails.getUsername();
 
         Product product = productService.findProduct(product_id);
-        ProductDetailResponse myProduct = toMyProductDetail(product);
-
         if(!email.equals(product.getMember().getEmail())) throw new ProductNotFoundException();
 
-        Member member = memberService.findMember(email);
-        MemberFitResponse memberFitResponse = new MemberFitResponse(
-                member.getId(),
-                member.getNickName(),
-                member.getMemberImage().getServerFileName(),
-                member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList()));
-
+        ProductDetailResponse myProduct = toMyProductDetail(product);
+        MemberFitResponse memberFitResponse = toMemberFitResponse(memberService.findMember(email));
 
         model.addAttribute("productStatus", ProductStatus.values());
         model.addAttribute("memberInfo", memberFitResponse);
@@ -209,15 +208,25 @@ public class MyPageController {
         return "success";
     }
 
+    /**
+     * 상품을 삭제합니다.
+     * @param product_id 상품의 아이디
+     * @return
+     */
     @GetMapping("/products/{product_id}/delete")
-    public String myProductDeletePage(@PathVariable Long product_id, Model model) {
+    public String myProductDeletePage(@PathVariable Long product_id) {
 
         Product product = productService.findProduct(product_id);
         List<ProductImage> productImages = product.getProductImages();
-        for (ProductImage productImage : productImages) {
-            s3Uploader.delete(productImage.getFilePath() + productImage.getOriginalFileName());
+
+        // 기본이미지가 아니라면 s3에 이미지 지우기
+        if(!productImages.get(0).getServerFileName().equals(ProductImageNotInit.SERVER_FILE_NAME)) {
+            for (ProductImage productImage : productImages) {
+                s3Uploader.delete(productImage.getFilePath() + productImage.getOriginalFileName());
+            }
         }
 
+        // 상품이미지 테이블 상품테이블 지우기
         productImageService.deleteProductImage(product_id);
         productService.deleteProduct(product_id);
 
@@ -225,7 +234,12 @@ public class MyPageController {
 
     }
 
-
+    /**
+     * 내 상품 수정 페이지로 이동합니다.
+     * @param product_id 상품의 아이디
+     * @param model 상품정보를 담을 모델
+     * @return 상품수정 url
+     */
     @GetMapping("/products/{product_id}/update")
     public String myProductUpdatePage(@PathVariable Long product_id, Model model) {
 
@@ -245,24 +259,45 @@ public class MyPageController {
 
     }
 
+    /**
+     * 상품 수정을 수행합니다.
+     * @param product_id
+     * @param form
+     * @param userDetails
+     * @param model
+     * @return
+     */
     @PostMapping("/products/{product_id}/update")
     public String myProductUpdateProc(@PathVariable Long product_id, @Validated ProductUpdateRequest form,
                                       @AuthenticationPrincipal UserDetails userDetails, Model model) {
 
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
-        MemberFitResponse memberFitResponse = new MemberFitResponse(
-                member.getId(),
-                member.getNickName(),
-                member.getMemberImage().getServerFileName(),
-                member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList()));
+        MemberFitResponse memberFitResponse = toMemberFitResponse(member);
         Product myProduct = productService.updateProduct(product_id, form.toProductEntity());
+
+        if (form.getProductImages().size() == 1 && form.getProductImages().get(0)
+                .getOriginalFilename().equals(""))  {
+        }
 
         model.addAttribute("myProduct", myProduct);
         model.addAttribute("memberFitResponse", memberFitResponse);
 
         return "redirect:/mypage/products/" + product_id;
 
+    }
+
+    /**
+     * 회원 응답 DTO로 변환합니다.
+     * @param member 회원 엔티티
+     * @return 회원정보 DTO
+     */
+    private MemberFitResponse toMemberFitResponse(Member member) {
+        return new MemberFitResponse(
+                member.getId(),
+                member.getNickName(),
+                member.getMemberImage().getServerFileName(),
+                member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList()));
     }
 
     /**

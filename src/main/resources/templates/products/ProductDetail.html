@@ -27,7 +27,7 @@
 }
 .div-info{
     width:100%;
-    height:200px;;
+    height:280px;
 }
 .div-other{
     width:100%;
@@ -152,7 +152,7 @@ ul.imgs li{
             <img th:src="${ownerInfo.profileImage}"/>
         </span>
         <span th:text="${ownerInfo.nickName}"></span>
-    <span>
+    <span style="text-align: right;">
         <a  th:href="@{/products/{product_id}/memberProducts/{owner_id}(product_id = ${product.id}, owner_id = ${ownerInfo.memberId})}">
             <div th:text="${ownerInfo.nickName}+'님의 상품 전체보기'"></div>
         </a>

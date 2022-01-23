@@ -101,4 +101,12 @@ public class Product extends BaseEntity {
         this.replyCount--;
     }
 
+    /**
+     * 상품 상태를 수정합니다.
+     * @param productStatus 수정할 상태정보
+     */
+    public void changedStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
+    }
+
 }

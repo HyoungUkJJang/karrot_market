@@ -153,13 +153,16 @@ ul.imgs li{
     <span th:text="${memberInfo.nickName}"></span>
 </div>
 <div class="div-info">
-    <div th:text="${product.title}"></div>
+    <input type="hidden" id="titleInfo" th:value="${product.title}">
+    <div id="productTitle" th:value="${product.title}" th:text="${product.title}"></div>
+    <select id="productStatus" name="productStatus"  onchange="setStatus(this.value)">
+        <option th:each="status : ${productStatus}" th:value="${status}" th:text="${status.value}" th:selected="${status?.value eq product?.productStatus?.value}"></option>
+    </select>
     <div th:text="${product.price}"></div>
     <div th:text="${product.category}"></div>
     <div th:text="${product.description}"></div>
 </div>
 
-//수정부분
 <div>
     <a th:href="@{/mypage/products/{product_id}/update(product_id=${product.id})}">수정하기</a>
 </div>
@@ -183,5 +186,37 @@ ul.imgs li{
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="/js/heart.js"></script>
+<script>
+    function setStatus(id)
+    {
+         var productId = $('#pageInfo').val();
+         var title = $('#titleInfo').val();
+         var statusValue = $('#productStatus').val();
+
+         var data = {
+            productStatus : $('#productStatus').val(),
+         };
+
+        $.ajax({
+            type: 'PUT',
+            url: '/mypage/products/'+productId+'/setStatus',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            success: function(res){
+                if(statusValue == "TRADING") {
+                     $('#productTitle').text(title);
+                } else if(statusValue == "RESERVED") {
+                    $('#productTitle').text("[예약중] "+title);
+                } else if(statusValue == "TRADE_COMPLETED") {
+                    $('#productTitle').text("[거래완료] "+title);
+                }
+            },
+            error: function(res){
+               alert(res);
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

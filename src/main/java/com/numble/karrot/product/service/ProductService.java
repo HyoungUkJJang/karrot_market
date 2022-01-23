@@ -1,7 +1,9 @@
 package com.numble.karrot.product.service;
 
 import com.numble.karrot.product.domain.Product;
+import com.numble.karrot.product.domain.ProductStatus;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,8 +45,53 @@ public interface ProductService {
      */
     List<Product> getMemberProductList(Long memberId);
 
+    /**
+     * 상품을 수정 후 수정된 상품을 리턴합니다.
+     * @param product_id 수정할 상품의 아이디
+     * @param updateForm 수정될 상품의 정보
+     * @return 수정된 상품
+     */
     Product updateProduct(Long product_id, Product updateForm);
 
+    /**
+     * 나의 관심목록 상품을 조회하여 리턴합니다.
+     * @param memberId 회원의 아이디
+     * @return 관심상품 목록
+     */
     List<Product> getMyHeartsProductList(Long memberId);
+
+    List<Product> getMyTradingProductList(Long memberId, Collection<ProductStatus> productStatuses);
+
+    List<Product> getMyCompleteProductList(Long memberId, ProductStatus productStatus);
+
+    /**
+     * 상품의 상태를 변경합니다.
+     * @param status 변경될 상품의 상태
+     */
+    void changedProductStatus(Product product,ProductStatus status);
+
+    /**
+     * 좋아요 개수를 증가시킵니다.
+     * @param product 해당 엔티티
+     */
+    void addHeartCount(Product product);
+
+    /**
+     * 좋아요 개수를 감소시킵니다.
+     * @param product 해당 엔티티
+     */
+    void deleteHeartCount(Product product);
+
+    /**
+     * 댓글 개수를 증가시킵니다.
+     * @param product 해당 엔티티
+     */
+    void addReplyCount(Product product);
+
+    /**
+     * 댓글 개수를 감소시킵니다.
+     * @param product 해당 엔티티
+     */
+    void deleteReplyCount(Product product);
 
 }

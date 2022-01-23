@@ -10,9 +10,12 @@ import com.numble.karrot.member.service.MemberService;
 import com.numble.karrot.member_image.domain.MemberImage;
 import com.numble.karrot.member_image.service.MemberImageService;
 import com.numble.karrot.product.domain.Product;
+import com.numble.karrot.product.domain.ProductStatus;
 import com.numble.karrot.product.dto.ProductDetailResponse;
 import com.numble.karrot.product.dto.ProductListResponse;
+import com.numble.karrot.product.dto.ProductStatusRequest;
 import com.numble.karrot.product.dto.ProductUpdateRequest;
+import com.numble.karrot.product.exception.ProductNotFoundException;
 import com.numble.karrot.product.service.ProductService;
 import com.numble.karrot.product_image.domain.ProductImageNotInit;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,7 +99,8 @@ public class MyPageController {
      * @return 다시 마이페이지로 이동합니다.
      */
     @PostMapping("/update")
-    public String updateProc(@AuthenticationPrincipal UserDetails userDetails,@ModelAttribute MemberUpdateRequest form) throws IOException {
+    public String updateProc(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute MemberUpdateRequest form) throws IOException {
+
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
 
@@ -120,7 +126,7 @@ public class MyPageController {
     }
 
     /**
-     * 내가 올린 상품 페이지로 이동합니다.
+     * 내가 판매중인 상품 페이지로 이동합니다.
      * @param userDetails
      * @param model
      * @return
@@ -129,17 +135,42 @@ public class MyPageController {
     public String myProductsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         String email = userDetails.getUsername();
         Member findMember = memberService.findMember(email);
-        List<ProductListResponse> myProducts = toMyProductList(findMember);
+        List<ProductListResponse> myProducts = toMyTradingProductList(findMember);
+
         model.addAttribute("productList", myProducts);
 
         return "mypage/MyProducts";
     }
 
+    /**
+     * 내가 거래완료 한 상품 페이지로 이동합니다.
+     * @param userDetails
+     * @param model
+     * @return
+     */
+    @GetMapping("/products/complete")
+    public String myProductsCompletePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String email = userDetails.getUsername();
+        Member findMember = memberService.findMember(email);
+        List<ProductListResponse> myProducts = toMyCompleteProductList(findMember);
+
+        model.addAttribute("productList", myProducts);
+
+        return "mypage/MyProducts";
+    }
+
+
     @GetMapping("/products/{product_id}")
-    public String myProductDetailPage(@AuthenticationPrincipal UserDetails userDetails,
-                                      @PathVariable Long product_id, Model model) {
+    public String myProductDetailPage(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long product_id,
+                                      Model model) {
 
         String email = userDetails.getUsername();
+
+        Product product = productService.findProduct(product_id);
+        ProductDetailResponse myProduct = toMyProductDetail(product);
+
+        if(!email.equals(product.getMember().getEmail())) throw new ProductNotFoundException();
+
         Member member = memberService.findMember(email);
         MemberFitResponse memberFitResponse = new MemberFitResponse(
                 member.getId(),
@@ -148,13 +179,30 @@ public class MyPageController {
                 member.getHearts().stream().map(h -> h.getProductInfo()).collect(Collectors.toList()));
 
 
-        Product product = productService.findProduct(product_id);
-        ProductDetailResponse myProduct = toMyProductDetail(product);
-
+        model.addAttribute("productStatus", ProductStatus.values());
         model.addAttribute("memberInfo", memberFitResponse);
         model.addAttribute("product", myProduct);
 
         return "mypage/MyProductDetail";
+
+    }
+
+    /**
+     * 상품의 상태변경 요청을 수행 후 200 상태코드를 리턴합니다.
+     * @param product_id 변경될 상품의 아이디
+     * @param productStatusRequest 변경될 상품의 상태정보
+     * @return
+     */
+    @PutMapping("/products/{product_id}/setStatus")
+    @ResponseBody
+    public String myProductStatusChange(@PathVariable Long product_id, @RequestBody ProductStatusRequest productStatusRequest) {
+
+        productService.changedProductStatus(
+                productService.findProduct(product_id),
+                productStatusRequest.getProductStatus()
+        );
+
+        return "success";
     }
 
     @GetMapping("/products/{product_id}/update")
@@ -201,8 +249,29 @@ public class MyPageController {
      * @param findMember 조회할 회원의 아이디
      * @return 상품 리스트
      */
-    private List<ProductListResponse> toMyProductList(Member findMember) {
-        return productService.getMyProductList(findMember.getId())
+    private List<ProductListResponse> toMyTradingProductList(Member findMember) {
+
+        return productService.getMyTradingProductList(findMember.getId(), Arrays.asList(ProductStatus.TRADING, ProductStatus.RESERVED))
+                .stream().map(p -> ProductListResponse.builder()
+                        .id(p.getId())
+                        .title(p.getTitle())
+                        .price(p.getPrice())
+                        .thumbnailImage(
+                                p.getProductImages().size() == 0 ?
+                                        ProductImageNotInit.SERVER_FILE_NAME :
+                                        p.getProductImages().get(0).getServerFileName())
+                        .build()
+                ).collect(Collectors.toList());
+    }
+
+    /**
+     * 나의 상품조회 리스트 DTO로 변환합니다.
+     * @param findMember 조회할 회원의 아이디
+     * @return 상품 리스트
+     */
+    private List<ProductListResponse> toMyCompleteProductList(Member findMember) {
+
+        return productService.getMyCompleteProductList(findMember.getId(), ProductStatus.TRADE_COMPLETED)
                 .stream().map(p -> ProductListResponse.builder()
                         .id(p.getId())
                         .title(p.getTitle())

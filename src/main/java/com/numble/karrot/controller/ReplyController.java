@@ -54,7 +54,6 @@ public class ReplyController {
     }
 
     @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
     public String replyRegisterProc(@AuthenticationPrincipal UserDetails userDetails,
                                     @PathVariable Long product_id, @Validated ReplyRegisterRequest form, Model model) {
 
@@ -62,7 +61,9 @@ public class ReplyController {
         Product findProduct = productService.findProduct(product_id);
         Reply reply = form.toReplyEntity(findMember, findProduct);
         replyService.registerReply(reply);
-        return "products/ProductList";
+        productService.addReplyCount(findProduct);
+        return "redirect:/products/" + product_id + "/reply";
+
     }
 
 }

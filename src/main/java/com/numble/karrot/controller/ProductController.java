@@ -53,9 +53,7 @@ public class ProductController {
     public String productsPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
         Member findMember = memberService.findMember(userDetails.getUsername());
-        MemberFitResponse memberInfo = MemberFitResponse.builder()
-                .nickName(findMember.getNickName())
-                .build();
+        MemberFitResponse memberInfo = toMemberFitResponse(findMember);
 
         model.addAttribute("memberInfo", memberInfo);
         model.addAttribute("productList", toProductListResponse());
@@ -168,7 +166,7 @@ public class ProductController {
             }
         }
 
-        return "redirect:/products";
+        return "redirect:/products/";
 
     }
 
@@ -180,6 +178,8 @@ public class ProductController {
         heartService.addHeart(new Heart(
                 productId, member, product
         ));
+        productService.addHeartCount(product);
+
         return "success";
     }
 
@@ -188,7 +188,7 @@ public class ProductController {
     public String deleteHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
         Member member = memberService.findMember(userDetails.getUsername());
         heartService.deleteHeart(productId, member.getId());
-
+        productService.deleteHeartCount(productService.findProduct(productId));
         return "success";
     }
 
@@ -224,6 +224,8 @@ public class ProductController {
                         p.getId(),
                         p.getTitle(),
                         p.getPrice(),
+                        p.getHeartCount(),
+                        p.getReplyCount(),
                         p.getProductImages().size() == 0 ?
                                 ProductImageNotInit.SERVER_FILE_NAME : p.getProductImages().get(0).getServerFileName()
                 )).collect(Collectors.toList ());

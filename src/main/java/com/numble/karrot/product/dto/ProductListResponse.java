@@ -16,13 +16,17 @@ public class ProductListResponse {
     private Long id;
     private String title;
     private int price;
+    private int heartCount;
+    private int replyCount;
     private String thumbnailImage;
 
     @Builder
-    public ProductListResponse(Long id, String title, int price, String thumbnailImage) {
+    public ProductListResponse(Long id, String title, int price, int heartCount, int replyCount, String thumbnailImage) {
         this.id = id;
         this.title = title;
         this.price = price;
+        this.heartCount = heartCount;
+        this.replyCount = replyCount;
         this.thumbnailImage = thumbnailImage;
     }
 

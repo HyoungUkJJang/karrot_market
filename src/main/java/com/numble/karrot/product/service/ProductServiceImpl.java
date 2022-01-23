@@ -1,12 +1,14 @@
 package com.numble.karrot.product.service;
 
 import com.numble.karrot.product.domain.Product;
+import com.numble.karrot.product.domain.ProductStatus;
 import com.numble.karrot.product.exception.ProductNotFoundException;
 import com.numble.karrot.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -53,5 +55,45 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getMyHeartsProductList(Long memberId) {
         return productRepository.heartMyProducts(memberId);
+    }
+
+    @Override
+    @Transactional
+    public void changedProductStatus(Product product,ProductStatus status) {
+        product.changedStatus(status);
+    }
+
+    @Override
+    @Transactional
+    public void addHeartCount(Product product) {
+        product.addHeartCount();
+    }
+
+    @Override
+    @Transactional
+    public void deleteHeartCount(Product product) {
+        product.deleteHeartCount();
+    }
+
+    @Override
+    @Transactional
+    public void addReplyCount(Product product) {
+        product.addReplyCount();
+    }
+
+    @Override
+    @Transactional
+    public void deleteReplyCount(Product product) {
+        product.deleteReplyCount();
+    }
+
+    @Override
+    public List<Product> getMyTradingProductList(Long memberId, Collection<ProductStatus> productStatuses) {
+        return productRepository.findByMemberIdAndProductStatusIn(memberId, productStatuses);
+    }
+
+    @Override
+    public List<Product> getMyCompleteProductList(Long memberId, ProductStatus productStatus) {
+        return productRepository.findByMemberIdAndProductStatus(memberId, productStatus);
     }
 }

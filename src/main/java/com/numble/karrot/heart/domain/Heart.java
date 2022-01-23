@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * 관심상품 엔티티 도메인
+ */
 @Entity
 @Getter
 @NoArgsConstructor

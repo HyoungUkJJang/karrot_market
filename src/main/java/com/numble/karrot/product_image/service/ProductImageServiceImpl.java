@@ -19,4 +19,10 @@ public class ProductImageServiceImpl implements ProductImageService{
         return productImageRepository.save(productImage);
     }
 
+    @Override
+    @Transactional
+    public void deleteProductImage(Long product_id) {
+        productImageRepository.deleteByProductId(product_id);
+    }
+
 }

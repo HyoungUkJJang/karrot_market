@@ -29,4 +29,5 @@ public interface MemberImageService {
      * @param newServerFileName
      */
     void updateMemberImage(MemberImage memberImage, String newFilePath, String newOriginalFileName, String newServerFileName);
+
 }

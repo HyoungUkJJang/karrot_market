@@ -29,7 +29,8 @@ public class ProductDetailResponse {
     private Integer replyCount;
 
     @Builder
-    public ProductDetailResponse(Long id, String title, int price, String description, ProductStatus productStatus, String category, List<String> productImages, Integer heartCount, Integer replyCount) {
+    public ProductDetailResponse(Long id, String title, int price, String description, ProductStatus productStatus,
+                                 String category, List<String> productImages, Integer heartCount, Integer replyCount) {
         this.id = id;
         this.title = title;
         this.price = price;

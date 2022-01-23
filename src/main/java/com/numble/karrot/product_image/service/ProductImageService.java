@@ -14,4 +14,10 @@ public interface ProductImageService {
      */
     ProductImage save(ProductImage productImage);
 
+    /**
+     * 상품과 관련된 이미지 정보를 삭제합니다.
+     * @param product_id 삭제할 상품의 아이디
+     */
+    void deleteProductImage(Long product_id);
+
 }

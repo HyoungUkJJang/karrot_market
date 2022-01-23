@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 상품 이미지 리포지토리 입니다.
  */
 public interface ProductImageRepository extends JpaRepository<ProductImage, Long> {
+    void deleteByProductId(Long product_id);
 }

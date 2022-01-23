@@ -100,7 +100,8 @@ public class ProductController {
      * @return 상품페이지 url
      */
     @GetMapping("/{product_id}/memberProducts/{owner_id}")
-    public String memberProductsPage(@PathVariable Long product_id, @PathVariable Long owner_id, Model model) {
+    public String memberProductsPage(@PathVariable Long product_id, @PathVariable Long owner_id,
+                                     @AuthenticationPrincipal UserDetails userDetails, Model model) {
 
         List<ProductListResponse> productList = productService.getMemberProductList(owner_id)
                 .stream().map(p -> ProductListResponse.builder()
@@ -114,6 +115,10 @@ public class ProductController {
                         ).build())
                 .collect(Collectors.toList());
 
+        Member findMember = memberService.findMember(userDetails.getUsername());
+        MemberFitResponse memberInfo = toMemberFitResponse(findMember);
+
+        model.addAttribute("memberInfo", memberInfo);
         model.addAttribute("pageInfo", product_id);
         model.addAttribute("productList", productList);
 
@@ -146,10 +151,13 @@ public class ProductController {
     public String registerProc(@ModelAttribute @Validated ProductRegisterRequest form,
                                @AuthenticationPrincipal UserDetails userDetails) throws IOException {
 
+        // 사용자 조회
         Member findMember = memberService.findMember(userDetails.getUsername());
+        // 상품엔티티 변환
         Product product = form.toProductEntity(findMember);
         Product register = productService.register(product);
 
+        // 이미지가 없다면 기본이미지로 셋팅
         if (form.getProductImages().size() == 1 && form.getProductImages().get(0)
                 .getOriginalFilename().equals("")) {
             ProductImage productImage = ProductImage.builder()
@@ -159,7 +167,7 @@ public class ProductController {
                     .product(register)
                     .build();
             productImageService.save(productImage);
-        } else {
+        } else { // 이미지가 있다면 S3에 이미지 등록 후 DB에 저장
             ArrayList<ProductImage> productImages = s3Uploader.uploadList(form.getProductImages(), "products", register);
             for (ProductImage productImage : productImages) {
                 productImageService.save(productImage);
@@ -170,19 +178,37 @@ public class ProductController {
 
     }
 
+    /**
+     * 좋아요를 반영합니다.
+     * @param productId 반영될 상품 아이디
+     * @param userDetails 좋아요 버튼을 누른 회원
+     * @return 성공 메시지
+     */
     @PostMapping("/{productId}/addHeart")
     @ResponseBody
     public String addHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
+
+        // 사용자 및 상품조회
         Member member = memberService.findMember(userDetails.getUsername());
         Product product = productService.findProduct(productId);
+
+        // 관심상품 테이블에 추가
         heartService.addHeart(new Heart(
                 productId, member, product
         ));
+
+        // 상품 관심 갯수 증가
         productService.addHeartCount(product);
 
         return "success";
     }
 
+    /**
+     * 좋아요를 취소합니다.
+     * @param productId 취소될 상품 아이디
+     * @param userDetails 취소 버튼을 누른 회원
+     * @return 성공 메시지
+     */
     @DeleteMapping("/{productId}/deleteHeart")
     @ResponseBody
     public String deleteHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails) {
@@ -191,7 +217,6 @@ public class ProductController {
         productService.deleteHeartCount(productService.findProduct(productId));
         return "success";
     }
-
 
     /**
      * 상품 상세조회 DTO로 변환합니다.
@@ -205,6 +230,7 @@ public class ProductController {
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .category(product.getCategory().getValue())
+                .productStatus(product.getProductStatus())
                 .heartCount(product.getHeartCount())
                 .replyCount(product.getReplyCount())
                 .productImages(product.getProductImages()
@@ -226,6 +252,7 @@ public class ProductController {
                         p.getPrice(),
                         p.getHeartCount(),
                         p.getReplyCount(),
+                        p.getProductStatus(),
                         p.getProductImages().size() == 0 ?
                                 ProductImageNotInit.SERVER_FILE_NAME : p.getProductImages().get(0).getServerFileName()
                 )).collect(Collectors.toList ());

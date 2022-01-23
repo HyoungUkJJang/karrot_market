@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 상품 수정하는 DTO 클래스 입니다.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

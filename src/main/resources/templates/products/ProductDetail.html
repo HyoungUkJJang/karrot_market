@@ -152,17 +152,19 @@ ul.imgs li{
             <img th:src="${ownerInfo.profileImage}"/>
         </span>
         <span th:text="${ownerInfo.nickName}"></span>
+    <span>
+        <a  th:href="@{/products/{product_id}/memberProducts/{owner_id}(product_id = ${product.id}, owner_id = ${ownerInfo.memberId})}">
+            <div th:text="${ownerInfo.nickName}+'님의 상품 전체보기'"></div>
+        </a>
+    </span>
 </div>
 <div class="div-info">
-    <div th:text="${product.title}"></div>
+    <div th:if="${product?.productStatus.value} ==  '판매중'" th:text="${product.title}"></div>
+    <div th:if="${product?.productStatus.value} == '예약중'" th:text="'[예약중] '+${product.title}"></div>
+    <div th:if="${product?.productStatus.value} == '거래완료'" th:text="'[거래완료] '+${product.title}"></div>
     <div th:text="${product.price}"></div>
     <div th:text="${product.category}"></div>
     <div th:text="${product.description}"></div>
-</div>
-<div class="div-other">
-    <a  th:href="@{/products/{product_id}/memberProducts/{owner_id}(product_id = ${product.id}, owner_id = ${ownerInfo.memberId})}">
-        <div th:text="${ownerInfo.nickName}+'님의 상품 전체보기'"></div>
-    </a>
 </div>
 <div class = "div-footer">
     <div class="sub1">

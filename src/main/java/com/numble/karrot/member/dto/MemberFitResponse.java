@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * 사용자 정보를 담아 응답하는 DTO 클래스 입니다.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

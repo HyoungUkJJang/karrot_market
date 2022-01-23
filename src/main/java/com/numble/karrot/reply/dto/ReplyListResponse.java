@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 댓글 리스트 응답 DTO 클래스 입니다.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

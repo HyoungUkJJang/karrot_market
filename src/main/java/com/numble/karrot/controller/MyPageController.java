@@ -17,7 +17,9 @@ import com.numble.karrot.product.dto.ProductStatusRequest;
 import com.numble.karrot.product.dto.ProductUpdateRequest;
 import com.numble.karrot.product.exception.ProductNotFoundException;
 import com.numble.karrot.product.service.ProductService;
+import com.numble.karrot.product_image.domain.ProductImage;
 import com.numble.karrot.product_image.domain.ProductImageNotInit;
+import com.numble.karrot.product_image.service.ProductImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.Banner;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,6 +49,7 @@ public class MyPageController {
     private final CategoryService categoryService;
     private final S3Uploader s3Uploader;
     private final ProductService productService;
+    private final ProductImageService productImageService;
 
     /**
      * 마이페이지로 이동합니다.
@@ -92,6 +95,7 @@ public class MyPageController {
         return "mypage/MyProfileUpdate";
 
     }
+
 
     /**
      * 회원정보를 수정합니다.
@@ -204,6 +208,23 @@ public class MyPageController {
 
         return "success";
     }
+
+    @GetMapping("/products/{product_id}/delete")
+    public String myProductDeletePage(@PathVariable Long product_id, Model model) {
+
+        Product product = productService.findProduct(product_id);
+        List<ProductImage> productImages = product.getProductImages();
+        for (ProductImage productImage : productImages) {
+            s3Uploader.delete(productImage.getFilePath() + productImage.getOriginalFileName());
+        }
+
+        productImageService.deleteProductImage(product_id);
+        productService.deleteProduct(product_id);
+
+        return "redirect:/mypage";
+
+    }
+
 
     @GetMapping("/products/{product_id}/update")
     public String myProductUpdatePage(@PathVariable Long product_id, Model model) {

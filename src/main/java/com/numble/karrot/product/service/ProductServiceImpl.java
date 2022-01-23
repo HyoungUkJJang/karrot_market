@@ -96,4 +96,10 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getMyCompleteProductList(Long memberId, ProductStatus productStatus) {
         return productRepository.findByMemberIdAndProductStatus(memberId, productStatus);
     }
+
+    @Override
+    @Transactional
+    public void deleteProduct(Long product_id) {
+        productRepository.deleteById(product_id);
+    }
 }

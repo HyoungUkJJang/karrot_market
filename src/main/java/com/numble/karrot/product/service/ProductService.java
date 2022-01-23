@@ -54,14 +54,32 @@ public interface ProductService {
     Product updateProduct(Long product_id, Product updateForm);
 
     /**
+     * 상품을 삭제합니다.
+     * @param product_id 삭제할 상품의 아이디
+     */
+    void deleteProduct(Long product_id);
+
+    /**
      * 나의 관심목록 상품을 조회하여 리턴합니다.
      * @param memberId 회원의 아이디
      * @return 관심상품 목록
      */
     List<Product> getMyHeartsProductList(Long memberId);
 
+    /**
+     * 내가 판매중인 상품 목록을 리턴합니다.
+     * @param memberId 회원의 아이디
+     * @param productStatuses 판매중 or 예약중인 상품
+     * @return 조회된 상품 리스트
+     */
     List<Product> getMyTradingProductList(Long memberId, Collection<ProductStatus> productStatuses);
 
+    /**
+     * 거래 완료된 상품 목록을 리턴합니다.
+     * @param memberId 회원의 아이디
+     * @param productStatus 거래완료 상태
+     * @return 조회된 상품 리스트
+     */
     List<Product> getMyCompleteProductList(Long memberId, ProductStatus productStatus);
 
     /**

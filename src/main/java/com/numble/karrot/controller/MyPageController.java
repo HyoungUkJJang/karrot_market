@@ -3,6 +3,7 @@ package com.numble.karrot.controller;
 import com.numble.karrot.aws.service.S3Uploader;
 import com.numble.karrot.category.domain.Category;
 import com.numble.karrot.category.service.CategoryService;
+import com.numble.karrot.heart.service.HeartService;
 import com.numble.karrot.member.domain.Member;
 import com.numble.karrot.member.dto.MemberFitResponse;
 import com.numble.karrot.member.dto.MemberUpdateRequest;
@@ -53,7 +54,7 @@ public class MyPageController {
     private final S3Uploader s3Uploader;
     private final ProductService productService;
     private final ProductImageService productImageService;
-    private final TradeService tradeService;
+    private final HeartService heartService;
 
     /**
      * 마이페이지로 이동합니다.
@@ -241,8 +242,8 @@ public class MyPageController {
      * @return
      */
     @GetMapping("/products/{product_id}/delete")
-    public String myProductDeletePage(@PathVariable Long product_id) {
-
+    public String myProductDeletePage(@PathVariable Long product_id, @AuthenticationPrincipal UserDetails userDetails) {
+        Member member = memberService.findMember(userDetails.getUsername());
         Product product = productService.findProduct(product_id);
         List<ProductImage> productImages = product.getProductImages();
 
@@ -254,6 +255,7 @@ public class MyPageController {
         }
 
         // 상품이미지 테이블 상품테이블 지우기
+        heartService.deleteHeart(product_id, member.getId());
         productImageService.deleteProductImage(product_id);
         productService.deleteProduct(product_id);
 

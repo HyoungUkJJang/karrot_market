@@ -100,7 +100,7 @@
         </div>
 
         <div class="div3">
-            <h6 th:if="${product?.productStatus.value} == '판매중'" th:text="${product.title}"></h6>
+            <h6 th:if="${product?.productStatus.value} == '거래중'" th:text="${product.title}"></h6>
             <h6 th:if="${product?.productStatus.value} == '예약중'" th:text="'[예약중] '+${product.title}"></h6>
             <h6 th:if="${product?.productStatus.value} == '거래완료'" th:text="'[거래완료] '+${product.title}"></h6>
             <h6 class="h6-text">장소</h6>

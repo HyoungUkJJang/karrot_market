@@ -159,7 +159,7 @@ ul.imgs li{
     </span>
 </div>
 <div class="div-info">
-    <div th:if="${product?.productStatus.value} == '판매중'" th:text="${product.title}"></div>
+    <div th:if="${product?.productStatus.value} == '거래중'" th:text="${product.title}"></div>
     <div th:if="${product?.productStatus.value} == '예약중'" th:text="'[예약중] '+${product.title}"></div>
     <div th:if="${product?.productStatus.value} == '거래완료'" th:text="'[거래완료] '+${product.title}"></div>
     <div th:text="${product.price}"></div>

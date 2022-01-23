@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HeartRepository extends JpaRepository<Heart, Long> {
     void deleteByProductIdAndMemberId(Long productId, Long memberId);
+
+    void deleteByProductId(Long productId);
 }

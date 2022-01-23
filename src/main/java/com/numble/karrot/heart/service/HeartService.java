@@ -21,4 +21,6 @@ public interface HeartService {
     */
    void deleteHeart(Long productId, Long memberId);
 
+   void deleteHeartAll(Long productId);
+
 }

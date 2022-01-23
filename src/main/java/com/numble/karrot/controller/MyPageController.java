@@ -21,6 +21,7 @@ import com.numble.karrot.product.service.ProductService;
 import com.numble.karrot.product_image.domain.ProductImage;
 import com.numble.karrot.product_image.domain.ProductImageNotInit;
 import com.numble.karrot.product_image.service.ProductImageService;
+import com.numble.karrot.reply.service.ReplyService;
 import com.numble.karrot.trade.domain.Trade;
 import com.numble.karrot.trade.service.TradeService;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,7 @@ public class MyPageController {
     private final ProductService productService;
     private final ProductImageService productImageService;
     private final HeartService heartService;
+    private final ReplyService replyService;
 
     /**
      * 마이페이지로 이동합니다.
@@ -255,7 +257,8 @@ public class MyPageController {
         }
 
         // 상품이미지 테이블 상품테이블 지우기
-        heartService.deleteHeart(product_id, member.getId());
+        replyService.deleteReply(product_id);
+        heartService.deleteHeartAll(product_id);
         productImageService.deleteProductImage(product_id);
         productService.deleteProduct(product_id);
 

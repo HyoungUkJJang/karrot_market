@@ -23,4 +23,6 @@ public interface ReplyService {
      */
     List<Reply> getReplyList(Long productId);
 
+    void deleteReply(Long productId);
+
 }

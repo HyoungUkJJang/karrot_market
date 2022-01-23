@@ -25,4 +25,9 @@ public class HeartServiceImpl implements HeartService {
         heartRepository.deleteByProductIdAndMemberId(productId, memberId);
     }
 
+    @Override
+    @Transactional
+    public void deleteHeartAll(Long productId) {
+        heartRepository.deleteByProductId(productId);
+    }
 }

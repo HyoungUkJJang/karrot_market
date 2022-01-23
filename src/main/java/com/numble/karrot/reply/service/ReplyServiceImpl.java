@@ -26,4 +26,9 @@ public class ReplyServiceImpl implements ReplyService {
         return replyRepository.findByProductId(productId);
     }
 
+    @Override
+    @Transactional
+    public void deleteReply(Long productId) {
+        replyRepository.deleteByProductId(productId);
+    }
 }

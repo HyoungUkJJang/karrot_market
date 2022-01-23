@@ -125,10 +125,19 @@ ul.imgs li{
     background-color: transparent;
     border: none;
 }
+    .backBtn {
+        position:fixed;
+        width:35px;
+        height:35px;
+        top:15px;
+        left:10px;
+        z-index: 1000;
+    }
 </style>
 <body>
 <!--상품이미지 부분-->
 <div class="div-image">
+    <a href="/mypage/products"><img class="backBtn" src="/images/backBtn.png"></a>
     <input type="hidden" id="pageInfo" th:value="${product.id}">
     <div class="slider">
 

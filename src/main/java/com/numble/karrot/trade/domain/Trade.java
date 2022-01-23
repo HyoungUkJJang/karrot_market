@@ -35,4 +35,32 @@ public class Trade extends BaseEntity {
         this.member = member;
     }
 
+    /**
+     * 거래 횟수 하나를 증가시킵니다.
+     */
+    public void addTradeQuantity() {
+        this.tradeQuantity++;
+    }
+
+    /**
+     * 거래 횟수 하나를 감소시킵니다.
+     */
+    public void deleteTradeQuantity() {
+        this.tradeQuantity++;
+    }
+
+    /**
+     * 기부 횟수 하나를 증가시킵니다.
+     */
+    public void addDonationQuantity() {
+        this.donationQuantity++;
+    }
+
+    /**
+     * 기부 횟수 하나를 감소시킵니다.
+     */
+    public void deleteDonationQuantity() {
+        this.donationQuantity--;
+    }
+
 }

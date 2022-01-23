@@ -19,4 +19,33 @@ public class TradeServiceImpl implements TradeService {
         return tradeRepository.save(trade);
     }
 
+    @Override
+    public Trade findTrade(Long memberId) {
+        return findTrade(memberId);
+    }
+
+    @Override
+    @Transactional
+    public void addTradeQuantity(Trade trade) {
+        trade.addTradeQuantity();
+    }
+
+    @Override
+    @Transactional
+    public void deleteTradeQuantity(Trade trade) {
+        trade.deleteTradeQuantity();
+    }
+
+    @Override
+    @Transactional
+    public void addDonationQuantity(Trade trade) {
+        trade.addDonationQuantity();
+    }
+
+    @Override
+    @Transactional
+    public void deleteDonationQuantity(Trade trade) {
+        trade.deleteDonationQuantity();
+    }
+
 }

@@ -20,6 +20,8 @@ import com.numble.karrot.product.service.ProductService;
 import com.numble.karrot.product_image.domain.ProductImage;
 import com.numble.karrot.product_image.domain.ProductImageNotInit;
 import com.numble.karrot.product_image.service.ProductImageService;
+import com.numble.karrot.trade.domain.Trade;
+import com.numble.karrot.trade.service.TradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.Banner;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -31,6 +33,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +53,7 @@ public class MyPageController {
     private final S3Uploader s3Uploader;
     private final ProductService productService;
     private final ProductImageService productImageService;
+    private final TradeService tradeService;
 
     /**
      * 마이페이지로 이동합니다.
@@ -198,14 +202,37 @@ public class MyPageController {
      */
     @PutMapping("/products/{product_id}/setStatus")
     @ResponseBody
-    public String myProductStatusChange(@PathVariable Long product_id, @RequestBody ProductStatusRequest productStatusRequest) {
+    public String myProductStatusChange(@PathVariable Long product_id, @AuthenticationPrincipal UserDetails userDetails,
+                                        @RequestBody ProductStatusRequest productStatusRequest) {
 
-        productService.changedProductStatus(
+          productService.changedProductStatus(
                 productService.findProduct(product_id),
                 productStatusRequest.getProductStatus()
         );
 
+        // 거래완료 상태에서 거래중 or 예약중으로 바뀌면 거래횟수를 감소시킨다.
+        /*
+        if ("거래완료".equals(findProduct.getProductStatus().getValue()) && (
+                "거래중".equals(productStatusRequest.getProductStatus().getValue()) ||
+                        "예약중".equals(productStatusRequest.getProductStatus().getValue()))) {
+            if(findProduct.getPrice() > 0) {
+                tradeService.deleteTradeQuantity(trade);
+            } else {
+                tradeService.deleteDonationQuantity(trade);
+            }
+        } else if ("거래완료".equals(productStatusRequest.getProductStatus().getValue()) && (
+                "거래중".equals(findProduct.getProductStatus().getValue()) ||
+                        "예약중".equals(findProduct.getProductStatus().getValue()))) {
+            if(findProduct.getPrice() > 0) {
+                tradeService.addTradeQuantity(trade);
+            } else {
+                tradeService.addDonationQuantity(trade);
+            }
+        }
+        */
+
         return "success";
+
     }
 
     /**
@@ -269,16 +296,12 @@ public class MyPageController {
      */
     @PostMapping("/products/{product_id}/update")
     public String myProductUpdateProc(@PathVariable Long product_id, @Validated ProductUpdateRequest form,
-                                      @AuthenticationPrincipal UserDetails userDetails, Model model) {
+                                      @AuthenticationPrincipal UserDetails userDetails, Model model) throws IOException {
 
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
         MemberFitResponse memberFitResponse = toMemberFitResponse(member);
         Product myProduct = productService.updateProduct(product_id, form.toProductEntity());
-
-        if (form.getProductImages().size() == 1 && form.getProductImages().get(0)
-                .getOriginalFilename().equals(""))  {
-        }
 
         model.addAttribute("myProduct", myProduct);
         model.addAttribute("memberFitResponse", memberFitResponse);

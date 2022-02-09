@@ -1,4 +1,4 @@
-package com.numble.karrot.controller.error;
+package com.numble.karrot.error;
 
 import com.numble.karrot.product.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;

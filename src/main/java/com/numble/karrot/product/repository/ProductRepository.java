@@ -23,8 +23,4 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
 
     List<Product> findByMemberIdAndProductStatusIn(Long memberId, Collection<ProductStatus> productStatuses);
 
-
-
-
-
 }

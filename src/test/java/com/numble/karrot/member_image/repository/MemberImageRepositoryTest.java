@@ -51,8 +51,6 @@ class MemberImageRepositoryTest {
 
     }
 
-
-
     /**
      * 테스트 멤버이미지 객체를 생성합니다.
      * @return

@@ -15,6 +15,7 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 
 import java.util.*;
 
@@ -23,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 
 /*
@@ -35,8 +38,7 @@ updateProduct [v]
 getMyHeartsProductList [v]
 getMyTradingProductList [v]
 getMyCompleteProductList [v]
-
-deleteProduct
+deleteProduct [v]
 changedProductStatus
 addHeartCount
 deleteHeartCount
@@ -344,6 +346,36 @@ class ProductServiceTest {
             }
 
         }
+
+    }
+
+    @Nested
+    @DisplayName("deleteProduct 메서드는")
+    class Describe_deleteProduct {
+
+        @Nested
+        @DisplayName("삭제할 상품이 있을 경우에")
+        class Context_edit_product {
+
+            @BeforeEach
+            void setUp() {
+                willDoNothing().given(productRepository).deleteById(any(Long.class));
+            }
+
+            @Test
+            @DisplayName("상품의 아이디, 수정 폼을 통해 상품 수정 후 리턴합니다.")
+            void It_return_updatedProduct() {
+                productService.deleteProduct(VALID_ID);
+                verify(productRepository).deleteById(any(Long.class));
+            }
+
+        }
+
+    }
+
+    @Nested
+    @DisplayName("changedProductStatus 메서드는")
+    class Describe_changedProductStatus{
 
     }
 

@@ -115,14 +115,14 @@ public class MyPageController {
         String email = userDetails.getUsername();
         Member member = memberService.findMember(email);
 
-        if (!form.getMemberImage().isEmpty()) {
-
-            MemberImage memberImage = memberImageService.findMemberImage(member.getId());
-            String serverUrl = s3Uploader.upload(form.getMemberImage(), "members");
-            memberImageService.updateMemberImage(memberImage, "members",
-                    form.getMemberImage().getOriginalFilename(), serverUrl);
-
-        }
+        // if (!form.getMemberImage().isEmpty()) {
+        //
+        //     MemberImage memberImage = memberImageService.findMemberImage(member.getId());
+        //     String serverUrl = s3Uploader.upload(form.getMemberImage(), "members");
+        //     memberImageService.updateMemberImage(memberImage, "members",
+        //             form.getMemberImage().getOriginalFilename(), serverUrl);
+        //
+        // }
         memberService.update(member, form.getNickName());
 
         return "redirect:/mypage";
@@ -250,11 +250,11 @@ public class MyPageController {
         List<ProductImage> productImages = product.getProductImages();
 
         // 기본이미지가 아니라면 s3에 이미지 지우기
-        if(!productImages.get(0).getServerFileName().equals(ProductImageNotInit.SERVER_FILE_NAME)) {
-            for (ProductImage productImage : productImages) {
-                s3Uploader.delete(productImage.getFilePath() + productImage.getOriginalFileName());
-            }
-        }
+        // if(!productImages.get(0).getServerFileName().equals(ProductImageNotInit.SERVER_FILE_NAME)) {
+        //     for (ProductImage productImage : productImages) {
+        //         s3Uploader.delete(productImage.getFilePath() + productImage.getOriginalFileName());
+        //     }
+        // }
 
         // 상품이미지 테이블 상품테이블 지우기
         replyService.deleteReply(product_id);

@@ -161,21 +161,21 @@ public class ProductController {
         Product register = productService.register(product);
 
         // 이미지가 없다면 기본이미지로 셋팅
-        if (form.getProductImages().size() == 1 && form.getProductImages().get(0)
-                .getOriginalFilename().equals("")) {
-            ProductImage productImage = ProductImage.builder()
-                    .filePath(ProductImageNotInit.FILE_PATH)
-                    .originalFileName(ProductImageNotInit.ORIGINAL_FILE_NAME)
-                    .serverFileName(ProductImageNotInit.SERVER_FILE_NAME)
-                    .product(register)
-                    .build();
-            productImageService.save(productImage);
-        } else { // 이미지가 있다면 S3에 이미지 등록 후 DB에 저장
-            ArrayList<ProductImage> productImages = s3Uploader.uploadList(form.getProductImages(), "products", register);
-            for (ProductImage productImage : productImages) {
-                productImageService.save(productImage);
-            }
-        }
+        // if (form.getProductImages().size() == 1 && form.getProductImages().get(0)
+        //         .getOriginalFilename().equals("")) {
+        //     ProductImage productImage = ProductImage.builder()
+        //             .filePath(ProductImageNotInit.FILE_PATH)
+        //             .originalFileName(ProductImageNotInit.ORIGINAL_FILE_NAME)
+        //             .serverFileName(ProductImageNotInit.SERVER_FILE_NAME)
+        //             .product(register)
+        //             .build();
+        //     productImageService.save(productImage);
+        // } else { // 이미지가 있다면 S3에 이미지 등록 후 DB에 저장
+        //     // ArrayList<ProductImage> productImages = s3Uploader.uploadList(form.getProductImages(), "products", register);
+        //     for (ProductImage productImage : productImages) {
+        //         productImageService.save(productImage);
+        //     }
+        // }
 
         return "redirect:/products/";
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+// TODO : 베이스 엔티티 상속 추가해야함
 /**
  * 관심상품 엔티티 도메인
  */
@@ -18,6 +19,7 @@ public class Heart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "heart_id")
     private Long id;
 
     private Long productInfo;
